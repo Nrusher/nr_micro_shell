@@ -41,7 +41,6 @@ extern "C"
 
     /* Includes ------------------------------------------------------------------*/
 #include "stdio.h"
-#include "types.h"
 #include "nr_micro_shell_config.h"
 #include "ansi.h"
 #ifndef print_shell

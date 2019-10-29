@@ -33,7 +33,6 @@
 #include "ansi_port.h"
 #include "ansi.h"
 #include "stdio.h"
-#include "sys.h"
 #include "nr_micro_shell.h"
 #include "string.h"
 
@@ -132,17 +131,17 @@ void nr_ansi_in_left(ansi_st *ansi)
     if (ansi->p > -1)
     {
         ansi->p--;
-        ansi_show_str(ansi->combine_buf, ansi->cmd_num);
+        shell_printf("\033[1D");
     }
 }
 
 // right key <- processing
 void nr_ansi_in_right(ansi_st *ansi)
 {
-    if (ansi->p < ansi->counter - 1)
+    if (ansi->p < (int)(ansi->counter - 1) )
     {
         ansi->p++;
-        ansi_show_str(ansi->combine_buf, ansi->cmd_num);
+		shell_printf("\033[1C");
     }
 }
 

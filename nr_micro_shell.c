@@ -74,7 +74,7 @@ static char* nr_shell_strtok(char* string_org,const char* demial)
 
 void _shell_init(shell_st *shell)
 {
-    printf(shell->user_name);
+    shell_printf(shell->user_name);
     shell_his_queue_init(&shell->cmd_his);
     shell_his_queue_add_cmd(&shell->cmd_his,"ls cmd");
 	shell->cmd_his.index = 1;
@@ -111,7 +111,7 @@ void shell_parser(shell_st *shell, char* str)
     if(strlen(str) > NR_SHELL_CMD_LINE_MAX_LENGTH)
     {
         shell_printf("this command is too long.\r\n");
-        printf(shell->user_name);
+        shell_printf(shell->user_name);
 		return;
     }
 
@@ -122,7 +122,7 @@ void shell_parser(shell_st *shell, char* str)
     {
 		if(isalpha(str[0]))
 		{
-			printf("no command named: %s\r\n",token);   
+			shell_printf("no command named: %s\r\n",token);   
 		}
     }
     else
@@ -149,7 +149,7 @@ void shell_parser(shell_st *shell, char* str)
         fp(argc,argv);
     }
 
-    printf(shell->user_name);
+    shell_printf(shell->user_name);
 }
 
 char* shell_cmd_complete(shell_st *shell, char *str)
