@@ -1,6 +1,6 @@
 # nr_micro_shell
 
->[中文版本](https://www.baidu.com)
+>[中文版本](https://github.com/Nrusher/nr_micro_shell/blob/master/readme_ch.md)
 
 > Author: Ji Youzhou
 

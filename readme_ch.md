@@ -1,6 +1,6 @@
 # nr_micro_shell
 
->[English version](https://www.baidu.com)
+>[English version](https://github.com/Nrusher/nr_micro_shell)
 
 > 作者：纪友州
 
