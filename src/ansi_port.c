@@ -28,6 +28,7 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
+ */
 
 /* Includes ------------------------------------------------------------------*/
 #include "ansi_port.h"
@@ -55,16 +56,36 @@ void nr_ansi_ctrl_common_slover(ansi_st *ansi)
     }
 }
 
-// line break '\n' processing
-void nr_ansi_in_newline(ansi_st *ansi)
+// line break '\r' processing
+void nr_ansi_in_enter(ansi_st *ansi)
 {
+#if NR_SHELL_END_OF_LINE == 1
     ansi->p = -1;
     ansi->counter = 0;
 
     nr_shell.cmd_his.index = (nr_shell.cmd_his.len > 0) ? 1 : 0;
 
     ansi_show_char('\r');
-	ansi_show_char('\n');
+    ansi_show_char('\n');
+#else
+    ansi_show_char('\r');
+#endif
+}
+
+// line break '\n' processing
+void nr_ansi_in_newline(ansi_st *ansi)
+{
+#if NR_SHELL_END_OF_LINE != 1
+    ansi->p = -1;
+    ansi->counter = 0;
+
+    nr_shell.cmd_his.index = (nr_shell.cmd_his.len > 0) ? 1 : 0;
+
+    ansi_show_char('\r');
+    ansi_show_char('\n');
+#else
+    ansi_show_char('\n');
+#endif
 }
 
 // Backspace '\b' processing
@@ -95,8 +116,13 @@ void nr_ansi_in_up(ansi_st *ansi)
         nr_shell.cmd_his.index++;
         nr_shell.cmd_his.index = (nr_shell.cmd_his.index > nr_shell.cmd_his.len) ? 1 : nr_shell.cmd_his.index;
 
+#if NR_SHLL_FULL_ANSI == 1
         shell_printf("\033[%dD", ansi->p + 1);
         shell_printf(NR_ANSI_CLEAR_RIGHT);
+#else
+        shell_printf("\r\n");
+        shell_printf(nr_shell.user_name);
+#endif
 
         shell_his_copy_queue_item(&nr_shell.cmd_his, nr_shell.cmd_his.index, ansi->current_line);
         ansi->counter = strlen(ansi->current_line);
@@ -114,8 +140,13 @@ void nr_ansi_in_down(ansi_st *ansi)
         nr_shell.cmd_his.index--;
         nr_shell.cmd_his.index = (nr_shell.cmd_his.index == 0) ? nr_shell.cmd_his.len : nr_shell.cmd_his.index;
 
+#if NR_SHLL_FULL_ANSI == 1
         shell_printf("\033[%dD", ansi->p + 1);
         shell_printf(NR_ANSI_CLEAR_RIGHT);
+#else
+        shell_printf("\r\n");
+        shell_printf(nr_shell.user_name);
+#endif
 
         shell_his_copy_queue_item(&nr_shell.cmd_his, nr_shell.cmd_his.index, ansi->current_line);
         ansi->counter = strlen(ansi->current_line);
@@ -138,28 +169,48 @@ void nr_ansi_in_left(ansi_st *ansi)
 // right key <- processing
 void nr_ansi_in_right(ansi_st *ansi)
 {
-    if (ansi->p < (int)(ansi->counter - 1) )
+    if (ansi->p < (int)(ansi->counter - 1))
     {
         ansi->p++;
-		shell_printf("\033[1C");
+        shell_printf("\033[1C");
     }
 }
 
 // tab key processing
 void nr_ansi_in_tab(ansi_st *ansi)
 {
+    unsigned char i;
     char *cmd;
     cmd = shell_cmd_complete(&nr_shell, ansi->current_line);
-    if (cmd != NULL && ansi->counter > 0)
+    if (cmd != NULL)
     {
-        shell_printf("\033[%dD", ansi->p + 1);
-        shell_printf(NR_ANSI_CLEAR_RIGHT);
 
-        ansi->counter = strlen(cmd);
-        ansi->p = ansi->counter - 1;
-        strcpy(ansi->current_line, cmd);
-    
-        ansi_show_str(ansi->current_line, ansi->counter);
+        if (ansi->counter == 0)
+        {
+            shell_printf("\r\n");
+            for (i = 0; static_cmd[i].cmd[0] != '\0'; i++)
+            {
+                shell_printf(static_cmd[i].cmd);
+                shell_printf("\r\n");
+            }
+
+            shell_printf(nr_shell.user_name);
+        }
+        else
+        {
+#if NR_SHLL_FULL_ANSI == 1
+            shell_printf("\033[%dD", ansi->p + 1);
+            shell_printf(NR_ANSI_CLEAR_RIGHT);
+#else
+            shell_printf("\r\n");
+            shell_printf(nr_shell.user_name);
+#endif
+            ansi->counter = strlen(cmd);
+            ansi->p = ansi->counter - 1;
+            strcpy(ansi->current_line, cmd);
+
+            ansi_show_str(ansi->current_line, ansi->counter);
+        }
     }
 }
 

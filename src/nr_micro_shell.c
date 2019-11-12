@@ -28,6 +28,7 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
+ */
 
 /* Includes ------------------------------------------------------------------*/
 #include "ansi.h"
@@ -35,149 +36,170 @@
 #include "string.h"
 #include "ctype.h"
 
-static char* nr_shell_strtok(char* string_org,const char* demial)
-{   
-    static unsigned char* last;   
-    unsigned char* str;           
-    const unsigned char* ctrl = (const unsigned char*)demial;  
-    unsigned char map[32];   
-    int count;  
-      
-    for (count =0; count <32; count++){  
-        map[count] = 0;  
-    }     
-    do {  
-        map[*ctrl >> 3] |= (1 << (*ctrl & 7));  
-    } while (*ctrl++);       
-    if (string_org){  
-        str = (unsigned char*)string_org;  
-    } else{  
-        str = last;  
-    }  
-    while ((map[*str >> 3] & (1 << (*str & 7)))  && *str){  
-        str++;  
-    }   
-    string_org = (char*)str;   
-    for (;*str; str++){  
-        if ( map[*str >> 3] & (1 << (*str & 7))){  
-            *str++ = '\0';  
-            break;           
-        }           
-    }      
-    last =str;      
-    if (string_org == (char*)str){  
-        return NULL;   
-    }else{  
-        return string_org;  
-    }
+static char *nr_shell_strtok(char *string_org, const char *demial)
+{
+	static unsigned char *last;
+	unsigned char *str;
+	const unsigned char *ctrl = (const unsigned char *)demial;
+	unsigned char map[32];
+	int count;
+
+	for (count = 0; count < 32; count++)
+	{
+		map[count] = 0;
+	}
+	do
+	{
+		map[*ctrl >> 3] |= (1 << (*ctrl & 7));
+	} while (*ctrl++);
+	if (string_org)
+	{
+		str = (unsigned char *)string_org;
+	}
+	else
+	{
+		str = last;
+	}
+	while ((map[*str >> 3] & (1 << (*str & 7))) && *str)
+	{
+		str++;
+	}
+	string_org = (char *)str;
+	for (; *str; str++)
+	{
+		if (map[*str >> 3] & (1 << (*str & 7)))
+		{
+			*str++ = '\0';
+			break;
+		}
+	}
+	last = str;
+	if (string_org == (char *)str)
+	{
+		return NULL;
+	}
+	else
+	{
+		return string_org;
+	}
 }
 
 void _shell_init(shell_st *shell)
 {
-    shell_printf(shell->user_name);
-    shell_his_queue_init(&shell->cmd_his);
-    shell_his_queue_add_cmd(&shell->cmd_his,"ls cmd");
+
+#ifdef NR_SHELL_SHOW_LOG
+	shell_printf(" _   _ ____    __  __ _                  ____  _          _ _ \r\n");
+	shell_printf("| \\ | |  _ \\  |  \\/  (_) ___ _ __ ___   / ___|| |__   ___| | |\r\n");
+	shell_printf("|  \\| | |_) | | |\\/| | |/ __| '__/ _ \\  \\___ \\| '_ \\ / _ \\ | |\r\n");
+	shell_printf("| |\\  |  _ <  | |  | | | (__| | | (_) |  ___) | | | |  __/ | |\r\n");
+	shell_printf("|_| \\_|_| \\_\\ |_|  |_|_|\\___|_|  \\___/  |____/|_| |_|\\___|_|_|\r\n");
+	shell_printf("                                                              \r\n");
+#endif
+
+	shell_printf(shell->user_name);
+	shell_his_queue_init(&shell->cmd_his);
+	shell_his_queue_add_cmd(&shell->cmd_his, "ls cmd");
 	shell->cmd_his.index = 1;
 }
 
-shell_fun_t shell_search_cmd(shell_st *shell,char* str)
+shell_fun_t shell_search_cmd(shell_st *shell, char *str)
 {
-    unsigned int i = 0;
-    while(shell->static_cmd[i].fp != NULL)
-    {
-        if(!strcmp(str,shell->static_cmd[i].cmd))
-        {
-            return shell->static_cmd[i].fp;
-        }
-        i++;
-    }
+	unsigned int i = 0;
+	while (shell->static_cmd[i].fp != NULL)
+	{
+		if (!strcmp(str, shell->static_cmd[i].cmd))
+		{
+			return shell->static_cmd[i].fp;
+		}
+		i++;
+	}
 
-    return NULL;
+	return NULL;
 }
 
-void shell_parser(shell_st *shell, char* str)
+void shell_parser(shell_st *shell, char *str)
 {
-    char argc = 0;
-    char argv[NR_SHELL_CMD_LINE_MAX_LENGTH + NR_SHELL_CMD_PARAS_MAX_NUM];
-    char* token = str;
-    shell_fun_t fp;
-    char index = NR_SHELL_CMD_PARAS_MAX_NUM;
-	
-	if(shell_his_queue_search_cmd(&shell->cmd_his,str) == 0 && str[0] != '\0')
-    {
-        shell_his_queue_add_cmd(&shell->cmd_his,str);
-    }
+	char argc = 0;
+	char argv[NR_SHELL_CMD_LINE_MAX_LENGTH + NR_SHELL_CMD_PARAS_MAX_NUM];
+	char *token = str;
+	shell_fun_t fp;
+	char index = NR_SHELL_CMD_PARAS_MAX_NUM;
 
-    if(strlen(str) > NR_SHELL_CMD_LINE_MAX_LENGTH)
-    {
-        shell_printf("this command is too long.\r\n");
-        shell_printf(shell->user_name);
+	if (shell_his_queue_search_cmd(&shell->cmd_his, str) == 0 && str[0] != '\0')
+	{
+		shell_his_queue_add_cmd(&shell->cmd_his, str);
+	}
+
+	if (strlen(str) > NR_SHELL_CMD_LINE_MAX_LENGTH)
+	{
+		shell_printf("this command is too long.\r\n");
+		shell_printf(shell->user_name);
 		return;
-    }
+	}
 
-    token = nr_shell_strtok(token," ");
-    fp = shell_search_cmd(shell,str);
+	token = nr_shell_strtok(token, " ");
+	fp = shell_search_cmd(shell, str);
 
-    if(fp == NULL)
-    {
-		if(isalpha(str[0]))
+	if (fp == NULL)
+	{
+		if (isalpha(str[0]))
 		{
-			shell_printf("no command named: %s\r\n",token);   
+			shell_printf("no command named: %s\r\n", token);
 		}
-    }
-    else
-    {
-        argv[argc] = index;
-        strcpy(argv+index,str);
-        index += strlen(str)+1;
+	}
+	else
+	{
+		argv[argc] = index;
+		strcpy(argv + index, str);
+		index += strlen(str) + 1;
 		argc++;
 
-        while (token != NULL)
-        {
-            token = nr_shell_strtok(NULL," ");
-            argv[argc] = index;
-            strcpy(argv+index,token);
-            index += strlen(token)+1;
+		while (token != NULL)
+		{
+			token = nr_shell_strtok(NULL, " ");
+			argv[argc] = index;
+			strcpy(argv + index, token);
+			index += strlen(token) + 1;
 			argc++;
-        }
-		
+		}
+
 		argc--;
-    }
+	}
 
-    if(fp != NULL)
-    {
-        fp(argc,argv);
-    }
+	if (fp != NULL)
+	{
+		fp(argc, argv);
+	}
 
-    shell_printf(shell->user_name);
+	shell_printf(shell->user_name);
 }
 
-char* shell_cmd_complete(shell_st *shell, char *str)
+char *shell_cmd_complete(shell_st *shell, char *str)
 {
-    char* temp = NULL;
-    unsigned char i;
-    char* best_matched = NULL;
-    unsigned char min_position = 255; 
+	char *temp = NULL;
+	unsigned char i;
+	char *best_matched = NULL;
+	unsigned char min_position = 255;
 
-    for(i=0;shell->static_cmd[i].cmd[0] != '\0';i++)
-    {
-        temp = NULL;
-        temp = strstr(shell->static_cmd[i].cmd,str);
-        if( temp != NULL && ((unsigned int)temp-(unsigned int)(&shell->static_cmd[i]) < min_position))
-        {
-            min_position = (unsigned int)temp-(unsigned int)(&shell->static_cmd[i]);
-            best_matched = (char*)&shell->static_cmd[i];
-            if(min_position == 0)
-            {
-                break;
-            }
-        }
-    }
+	for (i = 0; shell->static_cmd[i].cmd[0] != '\0'; i++)
+	{
+		temp = NULL;
+		temp = strstr(shell->static_cmd[i].cmd, str);
+		if (temp != NULL && ((unsigned int)temp - (unsigned int)(&shell->static_cmd[i]) < min_position))
+		{
+			min_position = (unsigned int)temp - (unsigned int)(&shell->static_cmd[i]);
+			best_matched = (char *)&shell->static_cmd[i];
+			if (min_position == 0)
+			{
+				break;
+			}
+		}
+	}
 
-    return best_matched;   
+	return best_matched;
 }
 
-void shell_his_queue_init(shell_his_queue_st* queue)
+void shell_his_queue_init(shell_his_queue_st *queue)
 {
 	queue->fp = 0;
 	queue->rp = 0;
@@ -188,18 +210,18 @@ void shell_his_queue_init(shell_his_queue_st* queue)
 	queue->store_num = 0;
 }
 
-void shell_his_queue_add_cmd(shell_his_queue_st* queue, char* str)
+void shell_his_queue_add_cmd(shell_his_queue_st *queue, char *str)
 {
 	unsigned short int str_len;
 	unsigned short int i;
 
 	str_len = strlen(str);
 
-	if (str_len > NR_SHELL_CMD_HISTORY_BUF_LENGTH )
+	if (str_len > NR_SHELL_CMD_HISTORY_BUF_LENGTH)
 	{
 		return;
 	}
-	
+
 	while (str_len > (NR_SHELL_CMD_HISTORY_BUF_LENGTH - queue->store_num) || queue->len == NR_SHELL_MAX_CMD_HISTORY_NUM)
 	{
 
@@ -234,10 +256,10 @@ void shell_his_queue_add_cmd(shell_his_queue_st* queue, char* str)
 	queue->queue[queue->rp] = queue->store_rear;
 }
 
-unsigned short int shell_his_queue_search_cmd(shell_his_queue_st* queue, char* str)
+unsigned short int shell_his_queue_search_cmd(shell_his_queue_st *queue, char *str)
 {
 	unsigned short int str_len;
-	unsigned short int i,j;
+	unsigned short int i, j;
 	unsigned short int index_temp = queue->fp;
 	unsigned short int start;
 	unsigned short int end;
@@ -270,7 +292,7 @@ unsigned short int shell_his_queue_search_cmd(shell_his_queue_st* queue, char* s
 
 			if (cmd_len == str_len)
 			{
-				matched_id = i+1;
+				matched_id = i + 1;
 				buf_index = start;
 				for (j = 0; j < str_len; j++)
 				{
@@ -282,14 +304,12 @@ unsigned short int shell_his_queue_search_cmd(shell_his_queue_st* queue, char* s
 
 					buf_index++;
 					buf_index = (buf_index > NR_SHELL_CMD_HISTORY_BUF_LENGTH) ? 0 : buf_index;
-
 				}
 
 				if (matched_id != 0)
 				{
 					return matched_id;
 				}
-
 			}
 		}
 
@@ -297,7 +317,7 @@ unsigned short int shell_his_queue_search_cmd(shell_his_queue_st* queue, char* s
 	}
 }
 
-void shell_his_copy_queue_item(shell_his_queue_st* queue, unsigned short i,char* str_buf)
+void shell_his_copy_queue_item(shell_his_queue_st *queue, unsigned short i, char *str_buf)
 {
 	unsigned short index_temp;
 	unsigned short start;
@@ -307,8 +327,8 @@ void shell_his_copy_queue_item(shell_his_queue_st* queue, unsigned short i,char*
 	if (i <= queue->len)
 	{
 		index_temp = queue->fp + i - 1;
-		index_temp = (index_temp > NR_SHELL_MAX_CMD_HISTORY_NUM) ? (index_temp- NR_SHELL_MAX_CMD_HISTORY_NUM - 1) : index_temp;
-		
+		index_temp = (index_temp > NR_SHELL_MAX_CMD_HISTORY_NUM) ? (index_temp - NR_SHELL_MAX_CMD_HISTORY_NUM - 1) : index_temp;
+
 		start = queue->queue[index_temp];
 		index_temp++;
 		index_temp = (index_temp > NR_SHELL_MAX_CMD_HISTORY_NUM) ? 0 : index_temp;

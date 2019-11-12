@@ -47,8 +47,6 @@ extern "C"
 #define NR_ANSI_CTRL_MAX_LEN 20
 #define NR_ANSI_MAX_EX_DATA_NUM 1
 
-#define ansi_show_char(x) putchar(x)
-
     enum
     {
         ANSI_ENABLE_SHOW,
@@ -126,7 +124,7 @@ extern "C"
 /** special characters functions \b,\n,\r,\t*/
 #define nr_ansi_in_bsb_function nr_ansi_in_backspace
 #define nr_ansi_in_bsn_function nr_ansi_in_newline
-#define nr_ansi_in_bsr_function nr_ansi_ctrl_common_slover
+#define nr_ansi_in_bsr_function nr_ansi_in_enter
 #define nr_ansi_in_bst_function nr_ansi_in_tab
 
 /** control characters functions */

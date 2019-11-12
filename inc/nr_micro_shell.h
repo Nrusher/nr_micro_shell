@@ -43,7 +43,8 @@ extern "C"
 #include "stdio.h"
 #include "nr_micro_shell_config.h"
 #include "ansi.h"
-#ifndef print_shell
+
+#ifndef shell_printf
 #define shell_printf(fmt, args...) printf(fmt, ##args);
 #endif
 
@@ -97,14 +98,24 @@ extern "C"
         _shell_init(&nr_shell); \
     }
 
-#define shell(c)                                           \
-    {                                                      \
-        if (ansi_get_char(c, &nr_ansi) == '\n')            \
-        {                                                  \
-            shell_parser(&nr_shell, nr_ansi.current_line); \
-            ansi_clear_current_line(&nr_ansi);             \
-        }                                                  \
+#if NR_SHELL_END_OF_LINE == 1
+#define NR_SHELL_END_CHAR '\r'
+#else
+#define NR_SHELL_END_CHAR '\n'
+#endif
+
+#define shell(c)                                             \
+    {                                                        \
+        if (ansi_get_char(c, &nr_ansi) == NR_SHELL_END_CHAR) \
+        {                                                    \
+            shell_parser(&nr_shell, nr_ansi.current_line);   \
+            ansi_clear_current_line(&nr_ansi);               \
+        }                                                    \
     }
+
+#ifdef USING_RT_THREAD
+    int rt_nr_shell_system_init(void);
+#endif
 
 #ifdef __cplusplus
 }

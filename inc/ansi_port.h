@@ -1,5 +1,5 @@
 /**
- * @file      nr_micro_shell_config.h
+ * @file      ansi_port.h
  * @author    Ji Youzhou
  * @version   V0.1
  * @date      28 Oct 2019
@@ -31,8 +31,8 @@
  */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __nr_micro_shell_config_h
-#define __nr_micro_shell_config_h
+#ifndef __ansi_port_h
+#define __ansi_port_h
 
 #ifdef __cplusplus
 extern "C"
@@ -40,30 +40,20 @@ extern "C"
 #endif
 
 /* Includes ------------------------------------------------------------------*/
+#include "ansi.h"
 
-/* ANSI command line buffer size. */
-#define NR_ANSI_LINE_SIZE 100
+    struct nr_ansi_struct;
+    typedef struct nr_ansi_struct ansi_st;
 
-/* Maximum user name length. */
-#define NR_SHELL_USER_NAME_MAX_LENGTH 30
-
-/* Maximum command name length. */
-#define NR_SHELL_CMD_NAME_MAX_LENGTH 10
-
-/* Command line buffer size. */
-#define NR_SHELL_CMD_LINE_MAX_LENGTH NR_ANSI_LINE_SIZE
-
-/* The maximum number of parameters in the command. */
-#define NR_SHELL_CMD_PARAS_MAX_NUM 10
-
-/* Command stores the most history commands (the maximum number here refers to the maximum number of commands that can be stored. When the history command line cache is full, it will automatically release the earliest command record) */
-#define NR_SHELL_MAX_CMD_HISTORY_NUM 3
-
-/* History command cache length */
-#define NR_SHELL_CMD_HISTORY_BUF_LENGTH 253
-
-/* If you use RTOS, you may need to do some special processing for printf(). */
-#define shell_printf(fmt, args...) printf(fmt, ##args);
+    void nr_ansi_ctrl_common_slover(ansi_st *ansi);
+    void nr_ansi_in_newline(ansi_st *ansi);
+    void nr_ansi_in_backspace(ansi_st *ansi);
+    void nr_ansi_in_up(ansi_st *ansi);
+    void nr_ansi_in_down(ansi_st *ansi);
+    void nr_ansi_in_left(ansi_st *ansi);
+    void nr_ansi_in_right(ansi_st *ansi);
+    void nr_ansi_in_tab(ansi_st *ansi);
+    void nr_ansi_in_enter(ansi_st *ansi);
 
 #ifdef __cplusplus
 }

@@ -27,10 +27,10 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
+ */
 
 /* Includes ------------------------------------------------------------------*/
 
-#include "ansi.h"
 #include "nr_micro_shell.h"
 #include "string.h"
 #include "ctype.h"
@@ -72,20 +72,6 @@ void shell_ls_cmd(char argc,char *argv)
 }
 
 /**
- * @brief reboot command for stm32f103c8t6
- */
-__asm void shell_reboot_cmd(char argc,char *argv)
-{
-	PRESERVE8
-	
-    MOV R0, #1
-    MSR FAULTMASK, R0
-    LDR R0, =0xE000ED0C
-    LDR R1, =0x05FA0004
-    STR R1, [R0]
-}
-
-/**
  * @brief test command
  */
 void shell_test_cmd(char argc, char *argv)
@@ -99,21 +85,10 @@ void shell_test_cmd(char argc, char *argv)
 }
 
 /**
- * @brief clear command
- */
-void shell_clear_cmd(char argc, char *argv)
-{
-	shell_printf("\033[2J");
-    shell_printf("\033[0;0H");
-}
-
-/**
  * @brief command list
  */
 const static_cmd_st static_cmd[] =
 {
-   {"clear",shell_clear_cmd},
-   {"reboot",shell_reboot_cmd},
    {"ls",shell_ls_cmd},
    {"test",shell_test_cmd},
    {"\0",NULL}
@@ -121,7 +96,7 @@ const static_cmd_st static_cmd[] =
 
 shell_st nr_shell =
     {
-        .user_name = "root@nr_shell:",
+        .user_name = NR_SHELL_USER_NAME,
         .static_cmd = static_cmd,
 };
 
