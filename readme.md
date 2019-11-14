@@ -27,6 +27,11 @@
 - 最多10个命令参数。
 - 命令行线程堆栈为512字节。
 
+nr_micro_shell演示效果如下
+
+![RT演示](./docs/pic/rt_test.gif)
+![裸机演示](./docs/pic/test.gif)
+
 ### 1.1 目录结构
 
 名称       | 说明
