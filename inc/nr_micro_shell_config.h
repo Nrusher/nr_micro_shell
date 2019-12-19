@@ -115,7 +115,7 @@ The end of line.
 #define NR_SHELL_CMD_HISTORY_BUF_LENGTH 253
 
 /* The user's name. */
-#define NR_SHELL_USER_NAME "nr@root"
+#define NR_SHELL_USER_NAME "nr@root:"
 
 /*
 0: \n
@@ -123,6 +123,12 @@ The end of line.
 2: \r\n
 */
 #define NR_SHELL_END_OF_LINE 0
+
+/* Weather the terminal support all ANSI codes. */
+#define NR_SHLL_FULL_ANSI 0
+
+/* Show logo or not. */
+#define NR_SHELL_SHOW_LOG
 
 /* If you use RTOS, you may need to do some special processing for printf(). */
 #define shell_printf(fmt, args...) printf(fmt, ##args);

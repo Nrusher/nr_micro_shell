@@ -1,6 +1,6 @@
 # nr_micro_shell
 
-[中文版本](./README.md)
+[中文版本](./readme.md)
 
 ## 1 Introduction
 
