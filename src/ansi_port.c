@@ -188,9 +188,9 @@ void nr_ansi_in_tab(ansi_st *ansi)
         if (ansi->counter == 0)
         {
             shell_printf("\r\n");
-            for (i = 0; static_cmd[i].cmd[0] != '\0'; i++)
+            for (i = 0; nr_cmd_start_add[i].fp != NULL; i++)
             {
-                shell_printf(static_cmd[i].cmd);
+                shell_printf(nr_cmd_start_add[i].cmd);
                 shell_printf("\r\n");
             }
 

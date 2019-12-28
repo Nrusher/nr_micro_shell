@@ -38,25 +38,25 @@
 /**
  * @brief ls command
  */
-void shell_ls_cmd(char argc,char *argv)
+void shell_ls_cmd(char argc, char *argv)
 {
 	unsigned int i = 0;
-	if(argc > 1)
+	if (argc > 1)
 	{
-		if(!strcmp("cmd",&argv[argv[1]]))
+		if (!strcmp("cmd", &argv[argv[1]]))
 		{
-			
-			for(i=0;static_cmd[i].cmd[0] != '\0';i++)
+
+			for (i = 0; nr_cmd_start_add[i].fp != NULL; i++)
 			{
-				shell_printf(static_cmd[i].cmd);
+				shell_printf(nr_cmd_start_add[i].cmd);
 				shell_printf("\r\n");
 			}
 		}
-		else if(!strcmp("-v",&argv[argv[1]]))
+		else if (!strcmp("-v", &argv[argv[1]]))
 		{
 			shell_printf("ls version 1.0.\r\n");
 		}
-		else if(!strcmp("-h",&argv[argv[1]]))
+		else if (!strcmp("-h", &argv[argv[1]]))
 		{
 			shell_printf("useage: ls [options]\r\n");
 			shell_printf("options: \r\n");
@@ -71,33 +71,21 @@ void shell_ls_cmd(char argc,char *argv)
 	}
 }
 
+NR_SHELL_CMD_EXPORT(ls, shell_ls_cmd);
+
 /**
  * @brief test command
  */
 void shell_test_cmd(char argc, char *argv)
 {
 	unsigned int i;
-    shell_printf("test command:\r\n");
-	for(i=0;i<argc;i++)
+	shell_printf("test command:\r\n");
+	for (i = 0; i < argc; i++)
 	{
-		shell_printf("paras %d: %s\r\n",i,&(argv[argv[i]]));
+		shell_printf("paras %d: %s\r\n", i, &(argv[argv[i]]));
 	}
 }
 
-/**
- * @brief command list
- */
-const static_cmd_st static_cmd[] =
-{
-   {"ls",shell_ls_cmd},
-   {"test",shell_test_cmd},
-   {"\0",NULL}
-};
-
-shell_st nr_shell =
-    {
-        .user_name = NR_SHELL_USER_NAME,
-        .static_cmd = static_cmd,
-};
+NR_SHELL_CMD_EXPORT(test, shell_test_cmd);
 
 /******************* (C) COPYRIGHT 2019 Nrush *****END OF FILE*****************/

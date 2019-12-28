@@ -36,6 +36,16 @@
 #include "string.h"
 #include "ctype.h"
 
+
+NR_SHELL_CMD_EXPORT_START("/0",NULL);
+NR_SHELL_CMD_EXPORT_END("/0",NULL);
+
+shell_st nr_shell =
+    {
+        .user_name = NR_SHELL_USER_NAME,
+        .static_cmd = nr_cmd_start_add,
+};
+
 static char *nr_shell_strtok(char *string_org, const char *demial)
 {
 	static unsigned char *last;

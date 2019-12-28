@@ -86,7 +86,7 @@ static void nr_shell_thread_entry(void *parameter)
 
 	rt_kprintf("nr micro shell init sucessfully.\r\n");
 	
-		shell_init();
+	shell_init();
 	
 	while (1)
 	{

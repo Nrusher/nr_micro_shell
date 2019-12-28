@@ -89,7 +89,6 @@ extern "C"
     unsigned short int shell_his_queue_search_cmd(shell_his_queue_st *queue, char *str);
     void shell_his_copy_queue_item(shell_his_queue_st *queue, unsigned short i, char *str_buf);
 
-    extern const static_cmd_st static_cmd[];
     extern shell_st nr_shell;
 
 #define shell_init()            \
@@ -116,6 +115,18 @@ extern "C"
 #ifdef USING_RT_THREAD
     int rt_nr_shell_system_init(void);
 #endif
+
+#define NR_USED __attribute__((used))
+#define NR_SECTION(x) __attribute__((section(".rodata.nr_shell_cmd" x)))
+#define NR_SHELL_CMD_EXPORT_START(cmd, func) \
+    NR_USED const static_cmd_st _nr_cmd_start_ NR_SECTION("0.end") = {#cmd, NULL}
+#define NR_SHELL_CMD_EXPORT(cmd, func) \
+    NR_USED const static_cmd_st _nr_cmd_##cmd NR_SECTION("1") = {#cmd, func}
+#define NR_SHELL_CMD_EXPORT_END(cmd, func) \
+    NR_USED const static_cmd_st _nr_cmd_end_ NR_SECTION("1.end") = {#cmd, NULL}
+
+    extern const static_cmd_st _nr_cmd_start_;
+#define nr_cmd_start_add (&_nr_cmd_start_ + 1)
 
 #ifdef __cplusplus
 }
