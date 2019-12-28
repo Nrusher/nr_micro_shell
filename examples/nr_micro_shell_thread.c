@@ -49,12 +49,12 @@ static rt_err_t nr_shell_rx_ind(rt_device_t dev, rt_size_t size)
 void link_nr_shell_to_consle(void)
 {
 	nr_shell_device = rt_console_get_device();
-	if (rt_device_open(nr_shell_device, RT_DEVICE_OFLAG_RDWR | 
-																			RT_DEVICE_FLAG_INT_RX |
-																			RT_DEVICE_FLAG_STREAM) == RT_EOK)
-		{
-			rt_device_set_rx_indicate(nr_shell_device, nr_shell_rx_ind);
-		}
+	if (rt_device_open(nr_shell_device, RT_DEVICE_OFLAG_RDWR |
+											RT_DEVICE_FLAG_INT_RX |
+											RT_DEVICE_FLAG_STREAM) == RT_EOK)
+	{
+		rt_device_set_rx_indicate(nr_shell_device, nr_shell_rx_ind);
+	}
 }
 
 #endif
@@ -79,15 +79,15 @@ static struct rt_thread nr_shell_thread;
 static void nr_shell_thread_entry(void *parameter)
 {
 	char ch;
-	
-	#ifndef RT_USING_POSIX
-		link_nr_shell_to_consle();
-	#endif
+
+#ifndef RT_USING_POSIX
+	link_nr_shell_to_consle();
+#endif
 
 	rt_kprintf("nr micro shell init sucessfully.\r\n");
-	
+
 	shell_init();
-	
+
 	while (1)
 	{
 		ch = nr_shell_getchar();
@@ -98,14 +98,14 @@ static void nr_shell_thread_entry(void *parameter)
 int rt_nr_shell_system_init(void)
 {
 	rt_err_t result = RT_EOK;
-    rt_thread_t tid;
+	rt_thread_t tid;
 
-    tid = &nr_shell_thread;
-    result = rt_thread_init(&nr_shell_thread,
-                            "nrshell",
-                            nr_shell_thread_entry, RT_NULL,
-                            &nr_shell_stack[0], sizeof(nr_shell_stack),
-                            RT_NR_SHELL_THREAD_PRIORITY, 10);
+	tid = &nr_shell_thread;
+	result = rt_thread_init(&nr_shell_thread,
+							"nrshell",
+							nr_shell_thread_entry, RT_NULL,
+							&nr_shell_stack[0], sizeof(nr_shell_stack),
+							RT_NR_SHELL_THREAD_PRIORITY, 10);
 	rt_sem_init(&nr_shell_rx_sem, "nrrx", 0, 0);
 
 	if (tid != NULL && result == RT_EOK)
@@ -116,7 +116,7 @@ int rt_nr_shell_system_init(void)
 	{
 		rt_kprintf("nr micro shell init failed.");
 	}
-   return 0;     
+	return 0;
 }
 
 INIT_APP_EXPORT(rt_nr_shell_system_init);
