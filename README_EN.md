@@ -2,6 +2,8 @@
 
 [中文版本](./readme.md)
 
+> v1.0.1
+
 ## 1 Introduction
 
 In debugging and maintenance, it is often necessary to interact with the MCU to obtain, set parameters or perform some operations, **nr_micro_shell** is a basic command-line tool written for MCU with less resources to meet this demand. Although a powerful **finsh** command-line interaction tool has been provided in the RT_Thread component. However, for a MCU with less ROM and RAM resources, **finsh** is still too large. If you want to retain use a command-line tool on these platforms, **nr_micro_shell** may be a good choice.
