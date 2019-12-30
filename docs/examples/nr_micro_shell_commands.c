@@ -88,11 +88,14 @@ void shell_test_cmd(char argc, char *argv)
 NR_SHELL_CMD_EXPORT(ls, shell_ls_cmd);
 NR_SHELL_CMD_EXPORT(test, shell_test_cmd);
 #else
-const static_cmd_st static_cmd[] =
-	{
-		{"ls", shell_ls_cmd},
-		{"test", shell_test_cmd},
-		{"\0", NULL}};
+
+const static_cmd_st static_cmd[] = 
+{
+	{"ls",shell_ls_cmd},
+	{"test",shell_test_cmd},
+	{"\0",NULL}
+};
+
 #endif
 
 /******************* (C) COPYRIGHT 2019 Nrush *****END OF FILE*****************/

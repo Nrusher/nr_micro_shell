@@ -100,36 +100,6 @@ int main(void)
 }
 ```
 
-Before using hardware input directly, it is recommended to use the following code (ensure that information can be printed normally) to verify whether nr_micro_shell can work.
-```c
-#include "nr_micro_shell.h"
-
-int main(void)
-{
-    unsigned int i = 0;
-    /* NR_SHELL_END_OF_LINE 0 */
-    char test_line[] = "test 1 2 3\n"
-    /* Initialization */
-    shell_init();
-
-    /* test */
-    for(i = 0; i < sizeof(test_line); i++)
-    {
-        shell(c);
-    }
-
-    while(1)
-    {
-        if(USART GET A CHAR 'c')
-        {
-            /* nr_micro_shell接收字符 */
-            shell(c);
-        }
-    }
-}
-```
-
-
 ### 3.3 Add your own command
 
 **STEP1**:
@@ -168,9 +138,7 @@ printf(argv[argv[2]])
 
 **STEP2**: 
 
-You need to register commands before using them. There are two ways to register commands.
-
-1. When NR_SHELL_USING_EXPORT_CMD is not defined in the configuration file, register you command in the table **static_cmd[]** as follow
+Register you command in the table **static_cmd[]** as follow
 
 ```c
 const static_cmd_st static_cmd[] =
@@ -184,17 +152,9 @@ const static_cmd_st static_cmd[] =
 
 ***Attention: DO NOT DELETE {"\0",NULL} !***
 
-2. When NR_SHELL_USING_EXPORT_CMD is defined in the configuration file and NR_SHELL_CMD_EXPORT() supports the compiler used, you can register the command as follow
-
-```c
-NR_SHELL_CMD_EXPORT(your_command_name,your_command_funtion);
-```
-
 ## 4 Attention
 
-Use NR_SHELL_USING_EXPORT_CMD to select the command registration method according to your usage habits.
-
-When using static_cmd[], ensure that a registry exists in your project
+Ensure that a registry exists in your project
 
 ```c
 const static_cmd_st static_cmd[] =
@@ -204,9 +164,7 @@ const static_cmd_st static_cmd[] =
 };
 ```
 
-When using NR_SHELL_CMD_EXPORT(), make sure that NR_SHELL_CMD_EXPORT() supports the compiler used, otherwise an error will be reported.
-
 ## 5 Contact
 
 - Maintainer：Nrusher
-- Homepage：<https://github.com/Nrusher/nr_micro_shell> or <https://gitee.com/nrush/nr_micro_shell>
+- Homepage：<https://github.com/Nrusher/nr_micro_shell>

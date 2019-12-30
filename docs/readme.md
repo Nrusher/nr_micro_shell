@@ -98,34 +98,6 @@ int main(void)
 }
 ```
 
-建议直接使用硬件输入前，建议使用如下代码(确保可以正常打印信息)，验证nr_micro_shell是否可以正常运行
-```c
-#include "nr_micro_shell.h"
-
-int main(void)
-{
-    unsigned int i = 0;
-    //匹配好结束符配置 NR_SHELL_END_OF_LINE 0
-    char test_line[] = "test 1 2 3\n"
-    /* 初始化 */
-    shell_init();
-
-    for(i = 0; i < sizeof(test_line); i++)
-    {
-        shell(c);
-    }
-
-    while(1)
-    {
-        if(USART GET A CHAR 'c')
-        {
-            /* nr_micro_shell接收字符 */
-            shell(c);
-        }
-    }
-}
-```
-
 ### 3.3 添加自己的命令
 
 **STEP1**:
@@ -163,9 +135,8 @@ printf(argv[argv[2]])
 ```
 
 **STEP2**:
-在使用命令前需要注册命令，共有两种方法注册命令
 
-1.当配置文件中NR_SHELL_USING_EXPORT_CMD未被定义，在**static_cmd[]**表中写入
+在**static_cmd[]**表中注册命令
 
 ```c
 const static_cmd_st static_cmd[] =
@@ -179,16 +150,9 @@ const static_cmd_st static_cmd[] =
 
 **_注意：不要删除{"\0"，NULL}！_**
 
-2.当配置文件中NR_SHELL_USING_EXPORT_CMD被定义，且NR_SHELL_CMD_EXPORT()支持使用的编译器时，可以使用以下方式注册命令
-```c
-NR_SHELL_CMD_EXPORT(your_command_name,your_command_funtion);
-```
-
 ## 4、注意事项
 
-根据你的使用习惯使用NR_SHELL_USING_EXPORT_CMD选择命令注册方式。
-
-使用注册表注册命令时，确保您的工程中存在注册表
+确保您的工程中存在注册表
 
 ```c
 const static_cmd_st static_cmd[] =
@@ -198,9 +162,7 @@ const static_cmd_st static_cmd[] =
 };
 ```
 
-使用NR_SHELL_CMD_EXPORT()时确保，NR_SHELL_CMD_EXPORT()支持使用的编译器，否则会报错
-
 ## 5、联系方式 & 感谢
 
 - 维护：Nrusher
-- 主页：<https://github.com/Nrusher/nr_micro_shell> or <https://gitee.com/nrush/nr_micro_shell>
+- 主页：<https://github.com/Nrusher/nr_micro_shell>
