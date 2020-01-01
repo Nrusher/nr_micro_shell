@@ -117,7 +117,7 @@ int main(void)
     /* test */
     for(i = 0; i < sizeof(test_line); i++)
     {
-        shell(c);
+        shell(test_line[i]);
     }
 
     while(1)

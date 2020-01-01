@@ -111,12 +111,14 @@ int main(void)
     char test_line[] = "test 1 2 3\n"
     /* 初始化 */
     shell_init();
-
+    
+    /* 初步测试代码 */
     for(i = 0; i < sizeof(test_line); i++)
     {
-        shell(c);
+        shell(test_line[i]);
     }
 
+    /* 正式工作代码 */
     while(1)
     {
         if(USART GET A CHAR 'c')
