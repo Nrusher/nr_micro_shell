@@ -32,7 +32,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "ansi_port.h"
-#include "ansi.h"
 #include "stdio.h"
 #include "nr_micro_shell.h"
 #include "string.h"

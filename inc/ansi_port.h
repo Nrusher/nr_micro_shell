@@ -40,8 +40,6 @@ extern "C"
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "ansi.h"
-
     struct nr_ansi_struct;
     typedef struct nr_ansi_struct ansi_st;
 

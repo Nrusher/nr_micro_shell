@@ -31,7 +31,6 @@
  */
 
 /* Includes ------------------------------------------------------------------*/
-#include "ansi.h"
 #include "nr_micro_shell.h"
 #include "string.h"
 #include "ctype.h"
