@@ -40,6 +40,7 @@ extern "C"
 #endif
 
 /* Includes ------------------------------------------------------------------*/
+
     struct nr_ansi_struct;
     typedef struct nr_ansi_struct ansi_st;
 
@@ -52,6 +53,8 @@ extern "C"
     void nr_ansi_in_right(ansi_st *ansi);
     void nr_ansi_in_tab(ansi_st *ansi);
     void nr_ansi_in_enter(ansi_st *ansi);
+	void nr_ansi_in__(ansi_st *ansi);
+	void nr_ansi_common_char_slover(ansi_st *ansi,char x);
 
 #ifdef __cplusplus
 }

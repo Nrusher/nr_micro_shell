@@ -35,15 +35,14 @@
 #include "string.h"
 #include "ctype.h"
 
-#ifdef NR_SHELL_USING_EXPORT_CMD
-NR_SHELL_CMD_EXPORT_START("/0", NULL);
-NR_SHELL_CMD_EXPORT_END("/0", NULL);
-#endif
+
+NR_SHELL_CMD_EXPORT_START("/0",NULL);
+NR_SHELL_CMD_EXPORT_END("/0",NULL);
 
 shell_st nr_shell =
-	{
-		.user_name = NR_SHELL_USER_NAME,
-		.static_cmd = nr_cmd_start_add,
+    {
+        .user_name = NR_SHELL_USER_NAME,
+        .static_cmd = nr_cmd_start_add,
 };
 
 static char *nr_shell_strtok(char *string_org, const char *demial)
@@ -142,7 +141,7 @@ void shell_parser(shell_st *shell, char *str)
 
 	if (strlen(str) > NR_SHELL_CMD_LINE_MAX_LENGTH)
 	{
-		shell_printf("this command is too long.\r\n");
+		shell_printf("this command is too long."NR_SHELL_NEXT_LINE);
 		shell_printf(shell->user_name);
 		return;
 	}
@@ -154,7 +153,7 @@ void shell_parser(shell_st *shell, char *str)
 	{
 		if (isalpha(str[0]))
 		{
-			shell_printf("no command named: %s\r\n", token);
+			shell_printf("no command named: %s"NR_SHELL_NEXT_LINE, token);
 		}
 	}
 	else

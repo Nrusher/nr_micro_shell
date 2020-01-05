@@ -102,6 +102,19 @@ extern "C"
 #else
 #define NR_SHELL_END_CHAR '\n'
 #endif
+	
+#if NR_SHELL_END_OF_LINE == 0
+#define NR_SHELL_NEXT_LINE "\n"
+#endif
+
+#if NR_SHELL_END_OF_LINE == 1
+#define NR_SHELL_NEXT_LINE "\r\n"
+#endif
+	
+#if NR_SHELL_END_OF_LINE == 2
+#define NR_SHELL_NEXT_LINE "\r\n"
+#endif
+
 
 #define shell(c)                                             \
     {                                                        \
@@ -116,34 +129,17 @@ extern "C"
     int rt_nr_shell_system_init(void);
 #endif
 
-#ifdef NR_SHELL_USING_EXPORT_CMD
-
-/* Compiler Check */
-#if defined(__CC_ARM) || defined(__CLANG_ARM) || defined(__GNUC__) || defined(__ADSPBLACKFIN__)
-#define NR_SECTION(x) __attribute__((section(x)))
 #define NR_USED __attribute__((used))
-#elif defined(__IAR_SYSTEMS_ICC__) /* for IAR Compiler */
-#define NR_SECTION(x) @x
-#define NR_USED __root
-#else
-#error NR_CMD_EXPORT not supported tool chain.
-#endif
-
-#define NR_CMD_SECTION(x) NR_SECTION(".rodata.nr_shell_cmd." x)
+#define NR_SECTION(x) __attribute__((section(".rodata.nr_shell_cmd" x)))
 #define NR_SHELL_CMD_EXPORT_START(cmd, func) \
-    NR_USED const static_cmd_st _nr_cmd_start_ NR_CMD_SECTION("0.end") = {#cmd, NULL}
+    NR_USED const static_cmd_st _nr_cmd_start_ NR_SECTION("0.end") = {#cmd, NULL}
 #define NR_SHELL_CMD_EXPORT(cmd, func) \
-    NR_USED const static_cmd_st _nr_cmd_##cmd NR_CMD_SECTION("1") = {#cmd, func}
+    NR_USED const static_cmd_st _nr_cmd_##cmd NR_SECTION("1") = {#cmd, func}
 #define NR_SHELL_CMD_EXPORT_END(cmd, func) \
-    NR_USED const static_cmd_st _nr_cmd_end_ NR_CMD_SECTION("1.end") = {#cmd, NULL}
+    NR_USED const static_cmd_st _nr_cmd_end_ NR_SECTION("1.end") = {#cmd, NULL}
 
     extern const static_cmd_st _nr_cmd_start_;
 #define nr_cmd_start_add (&_nr_cmd_start_ + 1)
-
-#else
-extern const static_cmd_st static_cmd[];
-#define nr_cmd_start_add static_cmd
-#endif
 
 #ifdef __cplusplus
 }

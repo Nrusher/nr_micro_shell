@@ -147,6 +147,7 @@ extern "C"
 #define nr_ansi_in_H_function nr_ansi_ctrl_common_slover
 #define nr_ansi_in_s_function nr_ansi_ctrl_common_slover
 #define nr_ansi_in_u_function nr_ansi_ctrl_common_slover
+#define nr_ansi_in___function nr_ansi_in__
 
     char ansi_get_char(char x, ansi_st *ansi);
     void ansi_init(ansi_st *ansi);

@@ -36,7 +36,7 @@
 
 ansi_st nr_ansi;
 
-const char nr_ansi_in_cmd[] = {'m', 'I', 'A', 'B', 'C', 'D', 'X', 'K', 'M', 'P', 'J', '@', 'L', 'l', 'h', 'n', 'H', 's', 'u', '\0'};
+const char nr_ansi_in_cmd[] = {'m', 'I', 'A', 'B', 'C', 'D', 'X', 'K', 'M', 'P', 'J', '@', 'L', 'l', 'h', 'n', 'H', 's', 'u', '~','\0'};
 void (*const nr_ansi_in_cmd_fun[])(ansi_st *) =
     {
         nr_ansi_in_m_function,
@@ -57,7 +57,9 @@ void (*const nr_ansi_in_cmd_fun[])(ansi_st *) =
         nr_ansi_in_n_function,
         nr_ansi_in_H_function,
         nr_ansi_in_s_function,
-        nr_ansi_in_u_function};
+        nr_ansi_in_u_function,
+		nr_ansi_in___function,
+	};
 
 const char nr_ansi_in_special_symbol[] = {'\b', '\n', '\r', '\t', '\0'};
 void (*const nr_ansi_in_special_symbol_fun[])(ansi_st *) =
@@ -85,6 +87,7 @@ int ansi_search_char(char x, const char *buf)
 enum
 {
     ANSI_NO_CTRL_CHAR,
+	ANSI_MAYBE_CTRL_CHAR,
     ANSI_WAIT_CTRL_CHAR_END,
 };
 
@@ -109,7 +112,6 @@ void ansi_clear_current_line(ansi_st *ansi)
 
 char ansi_get_char(char x, ansi_st *ansi)
 {
-    int i;
     int cmd_id = -1;
 
     if (ansi->combine_state == ANSI_NO_CTRL_CHAR)
@@ -126,43 +128,18 @@ char ansi_get_char(char x, ansi_st *ansi)
         {
             ansi->combine_state = ANSI_WAIT_CTRL_CHAR_END;
             ansi->combine_buf[ansi->cmd_num] = x;
+			ansi->cmd_num++;
         }
         else
         {
-            if (ansi->counter < NR_ANSI_LINE_SIZE - 2)
-            {
-                if (ansi->p < ansi->counter)
-                {
-                    for (i = ansi->counter; i > ansi->p; i--)
-                    {
-                        ansi->current_line[i] = ansi->current_line[i - 1];
-                    }
-                }
-
-                ansi->p++;
-                ansi->counter++;
-
-                ansi->current_line[ansi->p] = x;
-
-                ansi->current_line[ansi->counter] = '\0';
-                ansi_show_char(x);
-            }
-            else
-            {
-                ansi->counter = NR_ANSI_LINE_SIZE - 3;
-                if (ansi->p >= ansi->counter)
-                {
-                    ansi->p = ansi->counter - 1;
-                }
-                ansi->current_line[ansi->counter] = '\0';
-            }
+			nr_ansi_common_char_slover(ansi,x);
         }
     }
     else if (ansi->combine_state == ANSI_WAIT_CTRL_CHAR_END)
     {
         ansi->combine_buf[ansi->cmd_num] = x;
 
-        if (('a' <= x && 'z' >= x) || ('A' <= x && 'Z' >= x))
+        if (('a' <= x && 'z' >= x) || ('A' <= x && 'Z' >= x) || x== '~')
         {
             cmd_id = ansi_search_char(x, nr_ansi_in_cmd);
             nr_ansi_in_cmd_fun[cmd_id](ansi);
