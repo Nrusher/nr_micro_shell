@@ -208,6 +208,8 @@ const static_cmd_st static_cmd[] =
 
 When using NR_SHELL_CMD_EXPORT(), make sure that NR_SHELL_CMD_EXPORT() supports the compiler used, otherwise an error will be reported.
 
+ESC key not supported.
+
 ## 5 Contact
 
 - Maintainer：Nrusher

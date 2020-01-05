@@ -202,7 +202,9 @@ const static_cmd_st static_cmd[] =
 };
 ```
 
-使用NR_SHELL_CMD_EXPORT()时确保，NR_SHELL_CMD_EXPORT()支持使用的编译器，否则会报错
+使用NR_SHELL_CMD_EXPORT()时确保，NR_SHELL_CMD_EXPORT()支持使用的编译器，否则会报错。
+
+nr_micro_shell 不支持ESC键等控制键（控制符）。
 
 ## 5、联系方式 & 感谢
 
