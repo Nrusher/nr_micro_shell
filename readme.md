@@ -113,7 +113,7 @@ int main(void)
     shell_init();
     
     /* 初步测试代码 */
-    for(i = 0; i < sizeof(test_line); i++)
+    for(i = 0; i < sizeof(test_line)-1; i++)
     {
         shell(test_line[i]);
     }

@@ -115,7 +115,7 @@ int main(void)
     shell_init();
 
     /* test */
-    for(i = 0; i < sizeof(test_line); i++)
+    for(i = 0; i < sizeof(test_line)-1; i++)
     {
         shell(test_line[i]);
     }
