@@ -210,3 +210,4 @@ nr_micro_shell 不支持ESC键等控制键（控制符）。
 
 - 维护：Nrusher
 - 主页：<https://github.com/Nrusher/nr_micro_shell> or <https://gitee.com/nrush/nr_micro_shell>
+- [感谢这些网友的意见](./thanks.md)
