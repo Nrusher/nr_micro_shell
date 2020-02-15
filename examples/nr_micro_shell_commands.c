@@ -46,9 +46,9 @@ void shell_ls_cmd(char argc, char *argv)
 		if (!strcmp("cmd", &argv[argv[1]]))
 		{
 
-			for (i = 0; nr_cmd_start_add[i].fp != NULL; i++)
+			for (i = 0; nr_shell.static_cmd[i].fp != NULL; i++)
 			{
-				shell_printf(nr_cmd_start_add[i].cmd);
+				shell_printf(nr_shell.static_cmd[i].cmd);
 				shell_printf("\r\n");
 			}
 		}

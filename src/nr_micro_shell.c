@@ -36,8 +36,8 @@
 #include "ctype.h"
 
 
-NR_SHELL_CMD_EXPORT_START("/0",NULL);
-NR_SHELL_CMD_EXPORT_END("/0",NULL);
+NR_SHELL_CMD_EXPORT_START(0,NULL);
+NR_SHELL_CMD_EXPORT_END(n,NULL);
 
 shell_st nr_shell =
     {
@@ -142,7 +142,7 @@ void shell_parser(shell_st *shell, char *str)
 	if (strlen(str) > NR_SHELL_CMD_LINE_MAX_LENGTH)
 	{
 		shell_printf("this command is too long."NR_SHELL_NEXT_LINE);
-		shell_printf(shell->user_name);
+		shell_printf("%s",shell->user_name);
 		return;
 	}
 

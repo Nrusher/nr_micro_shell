@@ -138,8 +138,14 @@ extern "C"
 #define NR_SHELL_CMD_EXPORT_END(cmd, func) \
     NR_USED const static_cmd_st _nr_cmd_end_ NR_SECTION("1.end") = {#cmd, NULL}
 
-    extern const static_cmd_st _nr_cmd_start_;
-#define nr_cmd_start_add (&_nr_cmd_start_ + 1)
+    
+#ifdef NR_SHELL_USING_EXPORT_CMD
+	extern const static_cmd_st _nr_cmd_start_;
+#define nr_cmd_start_add (&_nr_cmd_start_+1)
+#else
+	extern const static_cmd_st static_cmd[];
+#define nr_cmd_start_add (&static_cmd[0])
+#endif
 
 #ifdef __cplusplus
 }

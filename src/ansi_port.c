@@ -67,7 +67,7 @@ void nr_ansi_common_char_slover(ansi_st *ansi,char x)
         ansi->current_line[ansi->p] = x;
 
         ansi->current_line[ansi->counter] = '\0';
-		if(ansi->p < ansi->counter)
+		if(ansi->p+1 < ansi->counter)
 		{
 			shell_printf("\033[1@");
 		}
@@ -140,7 +140,9 @@ void nr_ansi_in_backspace(ansi_st *ansi)
         ansi->counter--;
 
         ansi_show_char('\b');
+#if NR_SHLL_FULL_ANSI == 1
         shell_printf(NR_ANSI_CLR_R_MV_L_NCHAR(1));
+#endif
     }
 }
 
@@ -198,7 +200,9 @@ void nr_ansi_in_left(ansi_st *ansi)
     if (ansi->p > -1)
     {
         ansi->p--;
+#if NR_SHLL_FULL_ANSI == 1
         shell_printf("\033[1D");
+#endif
     }
 }
 
@@ -208,7 +212,9 @@ void nr_ansi_in_right(ansi_st *ansi)
     if (ansi->p < (int)(ansi->counter - 1))
     {
         ansi->p++;
+#if NR_SHLL_FULL_ANSI == 1
         shell_printf("\033[1C");
+#endif
     }
 }
 
@@ -224,9 +230,9 @@ void nr_ansi_in_tab(ansi_st *ansi)
         if (ansi->counter == 0)
         {
             shell_printf("\r\n");
-            for (i = 0; nr_cmd_start_add[i].fp != NULL; i++)
+            for (i = 0; nr_shell.static_cmd[i].fp != NULL; i++)
             {
-                shell_printf(nr_cmd_start_add[i].cmd);
+                shell_printf("%s",nr_shell.static_cmd[i].cmd);
                 shell_printf("\r\n");
             }
 
@@ -239,7 +245,7 @@ void nr_ansi_in_tab(ansi_st *ansi)
             shell_printf(NR_ANSI_CLEAR_RIGHT);
 #else
             shell_printf("\r\n");
-            shell_printf(nr_shell.user_name);
+            shell_printf("%s",nr_shell.user_name);
 #endif
             ansi->counter = strlen(cmd);
             ansi->p = ansi->counter - 1;
@@ -263,7 +269,9 @@ void nr_ansi_in__(ansi_st *ansi)
 		if((short)ansi->counter > ansi->p)
 		{
 			ansi->counter--;
+#if NR_SHLL_FULL_ANSI == 1
 			ansi_show_str("\033[1P",4);
+#endif
 		}
 		
 	}
