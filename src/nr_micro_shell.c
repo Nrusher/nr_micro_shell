@@ -32,8 +32,8 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "nr_micro_shell.h"
-#include "string.h"
-#include "ctype.h"
+#include <string.h>
+#include <ctype.h>
 
 
 NR_SHELL_CMD_EXPORT_START(0,NULL);
@@ -105,7 +105,7 @@ void _shell_init(shell_st *shell)
 	shell_printf("                                                              \r\n");
 #endif
 
-	shell_printf(shell->user_name);
+	shell_printf("%s",shell->user_name);
 	shell_his_queue_init(&shell->cmd_his);
 	shell_his_queue_add_cmd(&shell->cmd_his, "ls cmd");
 	shell->cmd_his.index = 1;
@@ -163,16 +163,15 @@ void shell_parser(shell_st *shell, char *str)
 		index += strlen(str) + 1;
 		argc++;
 
+		token = nr_shell_strtok(NULL, " ");
 		while (token != NULL)
 		{
-			token = nr_shell_strtok(NULL, " ");
 			argv[argc] = index;
 			strcpy(argv + index, token);
 			index += strlen(token) + 1;
 			argc++;
+			token = nr_shell_strtok(NULL, " ");
 		}
-
-		argc--;
 	}
 
 	if (fp != NULL)
@@ -180,7 +179,7 @@ void shell_parser(shell_st *shell, char *str)
 		fp(argc, argv);
 	}
 
-	shell_printf(shell->user_name);
+	shell_printf("%s",shell->user_name);
 }
 
 char *shell_cmd_complete(shell_st *shell, char *str)
@@ -194,9 +193,9 @@ char *shell_cmd_complete(shell_st *shell, char *str)
 	{
 		temp = NULL;
 		temp = strstr(shell->static_cmd[i].cmd, str);
-		if (temp != NULL && ((unsigned int)temp - (unsigned int)(&shell->static_cmd[i]) < min_position))
+		if (temp != NULL && ((unsigned long)temp - (unsigned long)(&shell->static_cmd[i]) < min_position))
 		{
-			min_position = (unsigned int)temp - (unsigned int)(&shell->static_cmd[i]);
+			min_position = (unsigned long)temp - (unsigned long)(&shell->static_cmd[i]);
 			best_matched = (char *)&shell->static_cmd[i];
 			if (min_position == 0)
 			{

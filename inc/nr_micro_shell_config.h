@@ -40,8 +40,10 @@ extern "C"
 #endif
 
     /* Includes ------------------------------------------------------------------*/
+#ifndef NR_MICRO_SHELL_SIMULATOR
 #include <rtconfig.h>
 #include <rtthread.h>
+#endif
 
 #ifdef PKG_USING_NR_MICRO_SHELL
 
@@ -94,8 +96,9 @@ The end of line.
 #define shell_printf(fmt, args...) rt_kprintf(fmt, ##args)
 #define ansi_show_char(x) rt_kprintf("%c", x)
 
-#else
+#endif
 
+#ifdef NR_MICRO_SHELL_SIMULATOR
 /* ANSI command line buffer size. */
 #define NR_ANSI_LINE_SIZE 100
 
@@ -140,10 +143,10 @@ The end of line.
 #define shell_printf(fmt, args...) printf(fmt, ##args);
 #define ansi_show_char(x) putchar(x)
 
-#ifdef __cplusplus
-}
 #endif
 
+#ifdef __cplusplus
+}
 #endif
 
 #endif

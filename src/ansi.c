@@ -32,7 +32,7 @@
 
 /* Includes ------------------------------------------------------------------ */
 #include "ansi.h"
-#include "stdio.h"
+#include <stdio.h>
 
 ansi_st nr_ansi;
 

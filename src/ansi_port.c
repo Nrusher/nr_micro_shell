@@ -33,9 +33,9 @@
 /* Includes ------------------------------------------------------------------*/
 #include "ansi_port.h"
 #include "ansi.h"
-#include "stdio.h"
+#include <stdio.h>
 #include "nr_micro_shell.h"
-#include "string.h"
+#include <string.h>
 
 // show string
 void ansi_show_str(char *str, unsigned int len)
@@ -71,7 +71,10 @@ void nr_ansi_common_char_slover(ansi_st *ansi,char x)
 		{
 			shell_printf("\033[1@");
 		}
+
+        #ifndef NR_MICRO_SHELL_SIMULATOR	
         ansi_show_char(x);
+        #endif	
     }
     else
     {
@@ -115,12 +118,13 @@ void nr_ansi_in_newline(ansi_st *ansi)
     ansi->counter = 0;
 
     nr_shell.cmd_his.index = nr_shell.cmd_his.len;
-	
+#ifndef NR_MICRO_SHELL_SIMULATOR	
 #if NR_SHELL_END_OF_LINE != 1
     ansi_show_char('\r');
     ansi_show_char('\n');
 #else
     ansi_show_char('\n');
+#endif
 #endif
 }
 
@@ -236,7 +240,7 @@ void nr_ansi_in_tab(ansi_st *ansi)
                 shell_printf("\r\n");
             }
 
-            shell_printf(nr_shell.user_name);
+            shell_printf("%s",nr_shell.user_name);
         }
         else
         {

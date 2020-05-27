@@ -32,8 +32,8 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "nr_micro_shell.h"
-#include "string.h"
-#include "ctype.h"
+#include <string.h>
+#include <ctype.h>
 
 /**
  * @brief ls command
@@ -48,7 +48,7 @@ void shell_ls_cmd(char argc, char *argv)
 
 			for (i = 0; nr_shell.static_cmd[i].fp != NULL; i++)
 			{
-				shell_printf(nr_shell.static_cmd[i].cmd);
+				shell_printf("%s",nr_shell.static_cmd[i].cmd);
 				shell_printf("\r\n");
 			}
 		}

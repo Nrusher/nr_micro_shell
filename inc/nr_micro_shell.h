@@ -115,7 +115,6 @@ extern "C"
 #define NR_SHELL_NEXT_LINE "\r\n"
 #endif
 
-
 #define shell(c)                                             \
     {                                                        \
         if (ansi_get_char(c, &nr_ansi) == NR_SHELL_END_CHAR) \
