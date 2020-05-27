@@ -45,6 +45,7 @@ extern "C"
 #include <rtthread.h>
 #endif
 
+
 #ifdef PKG_USING_NR_MICRO_SHELL
 
 /* use nr_micro_shell in rt_thread. */
