@@ -39,10 +39,8 @@ extern "C"
 {
 #endif
 
-/* Includes ------------------------------------------------------------------*/
-
-    struct nr_ansi_struct;
-    typedef struct nr_ansi_struct ansi_st;
+    /* Includes ------------------------------------------------------------------*/
+#include "ansi_def.h"
 
     void nr_ansi_ctrl_common_slover(ansi_st *ansi);
     void nr_ansi_in_newline(ansi_st *ansi);
@@ -53,8 +51,36 @@ extern "C"
     void nr_ansi_in_right(ansi_st *ansi);
     void nr_ansi_in_tab(ansi_st *ansi);
     void nr_ansi_in_enter(ansi_st *ansi);
-	void nr_ansi_in__(ansi_st *ansi);
-	void nr_ansi_common_char_slover(ansi_st *ansi,char x);
+    void nr_ansi_in__(ansi_st *ansi);
+    void nr_ansi_common_char_slover(ansi_st *ansi, char x);
+
+/** special characters functions \b,\n,\r,\t*/
+#define nr_ansi_in_bsb_function nr_ansi_in_backspace
+#define nr_ansi_in_bsn_function nr_ansi_in_newline
+#define nr_ansi_in_bsr_function nr_ansi_in_enter
+#define nr_ansi_in_bst_function nr_ansi_in_tab
+
+/** control characters functions */
+#define nr_ansi_in_m_function nr_ansi_ctrl_common_slover
+#define nr_ansi_in_I_function nr_ansi_ctrl_common_slover
+#define nr_ansi_in_A_function nr_ansi_in_up
+#define nr_ansi_in_B_function nr_ansi_in_down
+#define nr_ansi_in_C_function nr_ansi_in_right
+#define nr_ansi_in_D_function nr_ansi_in_left
+#define nr_ansi_in_X_function nr_ansi_ctrl_common_slover
+#define nr_ansi_in_K_function nr_ansi_ctrl_common_slover
+#define nr_ansi_in_M_function nr_ansi_ctrl_common_slover
+#define nr_ansi_in_P_function nr_ansi_ctrl_common_slover
+#define nr_ansi_in_J_function nr_ansi_ctrl_common_slover
+#define nr_ansi_in_at_function nr_ansi_ctrl_common_slover
+#define nr_ansi_in_L_function nr_ansi_ctrl_common_slover
+#define nr_ansi_in_l_function nr_ansi_ctrl_common_slover
+#define nr_ansi_in_h_function nr_ansi_ctrl_common_slover
+#define nr_ansi_in_n_function nr_ansi_ctrl_common_slover
+#define nr_ansi_in_H_function nr_ansi_ctrl_common_slover
+#define nr_ansi_in_s_function nr_ansi_ctrl_common_slover
+#define nr_ansi_in_u_function nr_ansi_ctrl_common_slover
+#define nr_ansi_in___function nr_ansi_in__
 
 #ifdef __cplusplus
 }

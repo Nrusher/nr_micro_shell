@@ -2,7 +2,7 @@
 
 [中文版本](./readme.md)
 
-> v1.0.1
+> v1.0.2
 
 ## 1 Introduction
 
@@ -192,7 +192,20 @@ const static_cmd_st static_cmd[] =
 NR_SHELL_CMD_EXPORT(your_command_name,your_command_funtion);
 ```
 
-## 4 Attention
+## 4、Using nr_micro_shell simulator under linux
+在工程`./examples/simulator/`目录下存放着nr_micro_shell仿真代码，仍在`./examples/nr_micro_shell_commands.c`文件中按上述方式添加自定义命令，添加完成后可以使用make命令编译源码，生产的可执行文件为`./examples/simulator/out/nr_micro_shell`或`./examples/simulator/out/nr_micro_shell_db`。可使用的make命令如下
+
+The code of nr_micro_shell simulator is stored in the directory `./examples/simulator/`, you can add your own command in `./examples/nr_micro_shell_commands.c` as described above. After adding, you can use the `make` command to compile the source code. The produced executable is `./examples/simulator/out/nr_micro_shell` or `./examples/simulator/out/nr_micro_shell_db`。 The make commands available are as follows
+```sh
+# compile executable file
+make
+# compile gdb file
+make debug
+# clean files
+make clean
+```
+
+## 5 Attention
 
 Use NR_SHELL_USING_EXPORT_CMD to select the command registration method according to your usage habits.
 
@@ -210,7 +223,7 @@ When using NR_SHELL_CMD_EXPORT(), make sure that NR_SHELL_CMD_EXPORT() supports 
 
 ESC key not supported.
 
-## 5 Contact
+## 6 Contact
 
 - Maintainer：Nrusher
 - Homepage：<https://github.com/Nrusher/nr_micro_shell> or <https://gitee.com/nrush/nr_micro_shell>

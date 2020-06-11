@@ -90,8 +90,8 @@ The end of line.
 #define NR_SHELL_SHOW_LOG
 #endif
 
- /* Use NR_SHELL_CMD_EXPORT() or not */
- #define NR_SHELL_USING_EXPORT_CMD
+/* Use NR_SHELL_CMD_EXPORT() or not */
+#define NR_SHELL_USING_EXPORT_CMD
 
 /* If you use RTOS, you may need to do some special processing for printf(). */
 #define shell_printf(fmt, args...) rt_kprintf(fmt, ##args)
@@ -99,7 +99,7 @@ The end of line.
 
 #endif
 
-#ifdef NR_MICRO_SHELL_SIMULATOR
+#ifndef PKG_USING_NR_MICRO_SHELL
 /* ANSI command line buffer size. */
 #define NR_ANSI_LINE_SIZE 100
 

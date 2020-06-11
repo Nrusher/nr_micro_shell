@@ -250,7 +250,7 @@ void shell_his_queue_add_cmd(shell_his_queue_st *queue, char *str)
 	}
 
 	queue->queue[queue->rp] = queue->store_rear;
-	queue->rp = queue->rp++;
+	queue->rp++;
 	queue->rp = (queue->rp > NR_SHELL_MAX_CMD_HISTORY_NUM) ? 0 : queue->rp;
 	queue->len++;
 

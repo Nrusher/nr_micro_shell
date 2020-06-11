@@ -2,7 +2,7 @@
 
 [English Version](./README_EN.md)
 
-> v1.0.1
+> v1.0.2
 
 ## 1、介绍
 
@@ -188,7 +188,19 @@ const static_cmd_st static_cmd[] =
 NR_SHELL_CMD_EXPORT(your_command_name,your_command_funtion);
 ```
 
-## 4、注意事项
+## 4、linux下使用nr_micro_shell仿真
+
+在工程`./examples/simulator/`目录下存放着nr_micro_shell仿真代码，仍在`./examples/nr_micro_shell_commands.c`文件中按上述方式添加自定义命令，添加完成后可以使用make命令编译源码，生产的可执行文件为`./examples/simulator/out/nr_micro_shell`或`./examples/simulator/out/nr_micro_shell_db`。可使用的make命令如下
+```sh
+# 编译可执行文件
+make
+# 编译可仿真执行文件
+make debug
+# 清除编译生成文件
+make clean
+```
+
+## 5、注意事项
 
 根据你的使用习惯使用NR_SHELL_USING_EXPORT_CMD选择命令注册方式。
 
@@ -206,7 +218,7 @@ const static_cmd_st static_cmd[] =
 
 nr_micro_shell 不支持ESC键等控制键（控制符）。
 
-## 5、联系方式 & 感谢
+## 6、联系方式 & 感谢
 
 - 维护：Nrusher
 - 主页：<https://github.com/Nrusher/nr_micro_shell> or <https://gitee.com/nrush/nr_micro_shell>

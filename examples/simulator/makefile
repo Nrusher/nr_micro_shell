@@ -21,17 +21,15 @@ SRC := 	simulator.c \
 
 default : all
 
-$(TARGET): 
+.PHONY: all
+all: 
+	@rm -f $(TARGET)
 	$(CC) $(CCFLAG) -I $(INC) -D NR_MICRO_SHELL_SIMULATOR $(SRC) -o $(TARGET)
 
-$(TARGET_DEBUG): 
-	$(CC) $(CCFLAG) $(DGBFLAG) -I $(INC) -D NR_MICRO_SHELL_SIMULATOR $(SRC) -o $(TARGET_DEBUG)
-
-.PHONY: all
-all: $(TARGET)
-
 .PHONY: debug
-debug: $(TARGET_DEBUG)
+debug: 
+	@rm -f $(TARGET_DEBUG)
+	$(CC) $(CCFLAG) $(DGBFLAG) -I $(INC) -D NR_MICRO_SHELL_SIMULATOR $(SRC) -o $(TARGET_DEBUG)
 
 .PHONY: clean
 clean:
