@@ -59,7 +59,7 @@ You need to select nr_micro_shell package from rt_thread package manager. The sp
 
 ```
 RT-Thread online packages
-    tools packages --->
+    tools packages ---> 
         [*] nr_micro_shell:Lightweight command line interaction tool. --->
 ```
 
