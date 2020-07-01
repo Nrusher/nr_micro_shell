@@ -4,3 +4,4 @@
 - bean：应用代码至[BabyOS](https://gitee.com/notrynohigh/BabyOS)，并给予若干意见。
 - pzibang：代码规范问题。
 - fish : `queue->rp = queue->rp++;`IAR优化出错问题；IAR中提示重复声明问题；
+- caochunchen : readme 中package位置说明错误
