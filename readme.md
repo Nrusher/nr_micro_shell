@@ -59,7 +59,7 @@ RT_Thread 使用 nr_micro_shell package package 需要在 RT-Thread 的包管理
 
 ```
 RT-Thread online packages
-    miscellaneous packages --->
+    tools packages --->
         [*] nr_micro_shell:Lightweight command line interaction tool. --->
 ```
 
