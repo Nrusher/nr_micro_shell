@@ -69,7 +69,7 @@ extern "C"
         unsigned short int store_rear;
         unsigned short int store_num;
 
-        char queue[NR_SHELL_MAX_CMD_HISTORY_NUM + 1];
+        unsigned char queue[NR_SHELL_MAX_CMD_HISTORY_NUM + 1];
         char buf[NR_SHELL_CMD_HISTORY_BUF_LENGTH + 1];
 
     } shell_his_queue_st;
