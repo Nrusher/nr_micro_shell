@@ -114,6 +114,12 @@ void _shell_init(shell_st *shell)
 shell_fun_t shell_search_cmd(shell_st *shell, char *str)
 {
 	unsigned int i = 0;
+	
+	if(*str == '\0')
+	{
+	    return NULL;
+	}
+	
 	while (shell->static_cmd[i].fp != NULL)
 	{
 		if (!strcmp(str, shell->static_cmd[i].cmd))
