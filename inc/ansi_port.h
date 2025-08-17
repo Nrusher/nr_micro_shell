@@ -35,24 +35,23 @@
 #define __ansi_port_h
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
-    /* Includes ------------------------------------------------------------------*/
+/* Includes ------------------------------------------------------------------*/
 #include "ansi_def.h"
 
-    void nr_ansi_ctrl_common_slover(ansi_st *ansi);
-    void nr_ansi_in_newline(ansi_st *ansi);
-    void nr_ansi_in_backspace(ansi_st *ansi);
-    void nr_ansi_in_up(ansi_st *ansi);
-    void nr_ansi_in_down(ansi_st *ansi);
-    void nr_ansi_in_left(ansi_st *ansi);
-    void nr_ansi_in_right(ansi_st *ansi);
-    void nr_ansi_in_tab(ansi_st *ansi);
-    void nr_ansi_in_enter(ansi_st *ansi);
-    void nr_ansi_in__(ansi_st *ansi);
-    void nr_ansi_common_char_slover(ansi_st *ansi, char x);
+void nr_ansi_ctrl_common_slover(ansi_st *ansi);
+void nr_ansi_in_newline(ansi_st *ansi);
+void nr_ansi_in_backspace(ansi_st *ansi);
+void nr_ansi_in_up(ansi_st *ansi);
+void nr_ansi_in_down(ansi_st *ansi);
+void nr_ansi_in_left(ansi_st *ansi);
+void nr_ansi_in_right(ansi_st *ansi);
+void nr_ansi_in_tab(ansi_st *ansi);
+void nr_ansi_in_enter(ansi_st *ansi);
+void nr_ansi_in__(ansi_st *ansi);
+void nr_ansi_common_char_slover(ansi_st *ansi, char x);
 
 /** special characters functions \b,\n,\r,\t*/
 #define nr_ansi_in_bsb_function nr_ansi_in_backspace

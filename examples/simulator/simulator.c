@@ -3,11 +3,10 @@
 
 int main(void)
 {
-    char c;
-    shell_init();
-    while(1)
-    {
-        c = getchar();
-        shell(c);
-    }
+	char c;
+	shell_init();
+	while (1) {
+		c = getchar();
+		shell(c);
+	}
 }

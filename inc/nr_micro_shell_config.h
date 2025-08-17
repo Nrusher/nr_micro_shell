@@ -35,16 +35,14 @@
 #define __nr_micro_shell_config_h
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
-    /* Includes ------------------------------------------------------------------*/
+/* Includes ------------------------------------------------------------------*/
 #ifndef NR_MICRO_SHELL_SIMULATOR
 #include <rtconfig.h>
 #include <rtthread.h>
 #endif
-
 
 #ifdef PKG_USING_NR_MICRO_SHELL
 
@@ -151,4 +149,4 @@ The end of line.
 #endif
 
 #endif
-    /******************* (C) COPYRIGHT 2019 Ji Youzhou *****END OF FILE*****************/
+/******************* (C) COPYRIGHT 2019 Ji Youzhou *****END OF FILE*****************/

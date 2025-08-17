@@ -35,14 +35,12 @@
  * 
  */
 
-
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __ansi_def_h
 #define __ansi_def_h
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -51,24 +49,19 @@ extern "C"
 #define NR_ANSI_CTRL_MAX_LEN 20
 #define NR_ANSI_MAX_EX_DATA_NUM 1
 
-    enum
-    {
-        ANSI_ENABLE_SHOW,
-        ANSI_DISABLE_SHOW
-    };
+enum { ANSI_ENABLE_SHOW, ANSI_DISABLE_SHOW };
 
-    typedef struct nr_ansi_struct
-    {
-        short p;
-        unsigned int counter;
-        char current_line[NR_ANSI_LINE_SIZE];
+typedef struct nr_ansi_struct {
+	short p;
+	unsigned int counter;
+	char current_line[NR_ANSI_LINE_SIZE];
 
-        char combine_buf[NR_ANSI_CTRL_MAX_LEN];
-        char cmd_num;
-        char combine_state;
-    } ansi_st;
+	char combine_buf[NR_ANSI_CTRL_MAX_LEN];
+	char cmd_num;
+	char combine_state;
+} ansi_st;
 
-    typedef void (*ansi_fun_t)(ansi_st *);
+typedef void (*ansi_fun_t)(ansi_st *);
 
 #define NR_ANSI_SET_TEXT(cmd) ((const char *)"\033["##cmd##"m") /** the form of set text font */
 
@@ -112,13 +105,13 @@ extern "C"
 #define NR_ANSI_HIDE_COURSER "\033[?25l"
 #define NR_ANSI_SHOW_COURSER "\033[?25h"
 
-#define NR_ANSI_SET_FONT(cmd) ((const char *)"\033["#cmd"I")
-#define NR_ANSI_CLR_R_NCHAR(cmd) ((const char *)"\033["#cmd"X")
-#define NR_ANSI_CLR_R_MV_L_NCHAR(cmd) ((const char *)"\033["#cmd"P")
+#define NR_ANSI_SET_FONT(cmd) ((const char *)"\033[" #cmd "I")
+#define NR_ANSI_CLR_R_NCHAR(cmd) ((const char *)"\033[" #cmd "X")
+#define NR_ANSI_CLR_R_MV_L_NCHAR(cmd) ((const char *)"\033[" #cmd "P")
 
 /** move course code */
-#define NR_ANSI_MV_L_N(n) ((const char *)"\033["#n"D")
-#define NR_ANSI_MV_R_N(n) ((const char *)"\033["#n"C")
+#define NR_ANSI_MV_L_N(n) ((const char *)"\033[" #n "D")
+#define NR_ANSI_MV_R_N(n) ((const char *)"\033[" #n "C")
 
 #define NR_ANSI_NORMAL "0"
 #define NR_ANSI_SONG "1"
