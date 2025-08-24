@@ -8,11 +8,11 @@
 
 MCU调试常需要执行获取/配置参数、执行特定函数等交互操作，**nr_micro_shell**是为满足该需求的低开销、裸机可用的命令行交互工具。
 
+**nr_micro_shell** 目标：**易用、低开销、可靠、可扩展**
+
 demo:
 ![RT演示](./docs/pic/rt_test.gif)
 ![裸机演示](./docs/pic/test.gif)
-
-**nr_micro_shell** 目标：**易用、低开销、可靠、可扩展**
 
 1.易用：
  - 适配：最少仅需实现shell_putc()函数，使用shell(c)获取字符流，即可使用。

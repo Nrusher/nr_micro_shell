@@ -133,7 +133,7 @@ static struct cmd *find_cmd(char *name)
 	return NULL;
 }
 
-static void split_cmdline(char *line, uint8_t *argc, char *argv[], uint8_t argv_sz)
+static int split_cmdline(char *line, uint8_t *argc, char *argv[], uint8_t argv_sz)
 {
 	char *p = line;
 	uint8_t arg_count = 0;
@@ -154,6 +154,8 @@ static void split_cmdline(char *line, uint8_t *argc, char *argv[], uint8_t argv_
 				*p = '\0';
 				argv[arg_count] = arg_start;
 				arg_count++;
+			} else {
+				return -1;
 			}
 			arg_start = NULL;
 		}
@@ -166,22 +168,29 @@ static void split_cmdline(char *line, uint8_t *argc, char *argv[], uint8_t argv_
 	}
 
 	*argc = arg_count;
+
+	return 0;
 }
 
 static int run_cmdline(struct nr_micro_shell *sh)
 {
 	int i;
-	uint8_t argc;
+	uint8_t argc = 0;
 	char *argv[NR_SHELL_MAX_PARAM_NUM];
 	char line_tmp[NR_SHELL_MAX_LINE_SZ];
-	struct cmd *cmd;
+	struct cmd *cmd = NULL;
 	int ret = -1;
 
 	argv[0] = NULL;
 
 	strcpy(line_tmp, sh->line);
 	DLOG("line: %s", line_tmp);
-	split_cmdline(line_tmp, &argc, argv, NR_SHELL_MAX_PARAM_NUM);
+	ret = split_cmdline(line_tmp, &argc, argv, NR_SHELL_MAX_PARAM_NUM);
+
+	if (ret < 0) {
+		shell_printf("\r\nInput parameter count > %d!\r\n", NR_SHELL_MAX_PARAM_NUM);
+		return ret;
+	}
 
 	for (i = 0; i < argc; i++) {
 		DLOG("argv[%d]: %s", i, argv[i]);

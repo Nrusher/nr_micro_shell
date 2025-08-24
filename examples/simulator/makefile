@@ -1,6 +1,6 @@
 CC := gcc
 CCFLAG :=
-DGBFLAG := -g
+DGBFLAG := -g -fprofile-arcs -ftest-coverage --coverage -lgcov -D NR_DEBUG_BIN -fPIC -O0
 CCOBJFLAG := $(CCFLAG) -c
 
 BIN_PATH := out

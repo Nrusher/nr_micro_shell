@@ -1,18 +1,17 @@
 # nr_micro_shell
 
-[中文版](./README.md)
+[中文版](./readme.md)
 
 > v2.0
-
 
 ## 1. Introduction
 MCU debugging often requires interactive operations such as retrieving/configuring parameters and executing specific functions. **nr_micro_shell** is a low-overhead, bare-metal compatible command-line interaction tool designed to meet these needs.
 
+The goals of **nr_micro_shell** are: **ease of use, low overhead, reliability, and extensibility**
+
 Demos:
 ![RT Demo](./docs/pic/rt_test.gif)
 ![Bare-Metal Demo](./docs/pic/test.gif)
-
-The goals of **nr_micro_shell** are: **ease of use, low overhead, reliability, and extensibility**
 
 ### 1.1 Ease of Use
 - **Adaptation**: Only the `shell_putc()` function needs to be implemented at minimum. Simply use `shell(c)` to process the character stream, and the tool is ready for use.
