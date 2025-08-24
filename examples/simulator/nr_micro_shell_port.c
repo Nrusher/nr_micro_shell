@@ -23,72 +23,31 @@
  * SOFTWARE.
  ***********************************************************************************/
 
-#ifndef __NR_MICRO_SHELL_H
-#define __NR_MICRO_SHELL_H
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
+#include "time.h"
+#include "stdint.h"
 #include "nr_micro_shell_port.h"
+#include "nr_micro_shell.h"
 
-/* Default config */
-#ifndef NR_SHELL_MAX_LINE_SZ
-#define NR_SHELL_MAX_LINE_SZ 80
-#endif
+FILE *dbug_log;
+FILE *key_rec_log;
 
-#ifndef NR_SHELL_PROMPT
-#define NR_SHELL_PROMPT "nr@dev"
-#endif
-
-#ifndef NR_SHELL_MAX_PARAM_NUM
-#define NR_SHELL_MAX_PARAM_NUM 8
-#endif
-
-#ifdef NR_SHELL_HISTORY_CMD_SUPPORT
-#ifndef NR_SHELL_HISTORY_CMD_NUM
-#define NR_SHELL_HISTORY_CMD_NUM 5
-#endif
-
-#ifndef NR_SHELL_HISTORY_CMD_SZ
-#define NR_SHELL_HISTORY_CMD_SZ 50
-#endif
-#endif
-
-struct nr_micro_shell {
-	uint8_t cursor_pos;
-	uint8_t rcv_len;
-	char line[NR_SHELL_MAX_LINE_SZ];
-	uint8_t state;
-
-#ifdef NR_SHELL_HISTORY_CMD_SUPPORT
-	char his_cmd[NR_SHELL_HISTORY_CMD_NUM][NR_SHELL_HISTORY_CMD_SZ];
-	char shadow_line[NR_SHELL_MAX_LINE_SZ];
-	uint8_t his_cmd_count;
-	uint8_t his_cmd_request_index;
-	uint8_t his_cmd_rear;
-#endif
-};
-
-struct cmd {
-	char *name;
-	int (*func)(uint8_t argc, char **argv);
-	char *desc;
-};
-
-extern struct cmd cmd_table[];
-extern char *auto_complete_words[];
-extern const uint16_t cmd_table_size;
-extern const uint16_t auto_complete_words_size;
-
-void shell_printf(const char *fmt, ...);
-void shell_init(void);
-void shell(char c);
-void show_all_cmds(void);
-
-#ifdef __cplusplus
+uint64_t get_sys_timestamp(void)
+{
+	struct timespec ts;
+	clock_gettime(CLOCK_MONOTONIC, &ts);
+	return ts.tv_sec * 1000000000 + ts.tv_nsec;
 }
-#endif
-#endif /* __NR_MICRO_SHELL_H */
+
+void nr_shell_debug_log_init(void)
+{
+	dbug_log = fopen("debug.log", "w");
+	if (!dbug_log)
+		printf("failed to open debug log\n");
+	setvbuf(dbug_log, NULL, _IONBF, 0);
+	key_rec_log = fopen("key_rec.log", "w");
+	if (!key_rec_log)
+		printf("failed to open key rec log\n");
+	setvbuf(key_rec_log, NULL, _IONBF, 0);
+}
 
 /******************* (C) COPYRIGHT 2025 Ji Youzhou ****************************/

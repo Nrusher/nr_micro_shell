@@ -23,72 +23,23 @@
  * SOFTWARE.
  ***********************************************************************************/
 
-#ifndef __NR_MICRO_SHELL_H
-#define __NR_MICRO_SHELL_H
+#ifndef __NR_MICRO_SHELL_PORT_H__
+#define __NR_MICRO_SHELL_PORT_H__
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "nr_micro_shell_port.h"
+#include <stdio.h>
+#include <stdint.h>
 
-/* Default config */
-#ifndef NR_SHELL_MAX_LINE_SZ
-#define NR_SHELL_MAX_LINE_SZ 80
-#endif
+/* Required configuration macros */
+#define shell_putc(x) putchar((x))
 
-#ifndef NR_SHELL_PROMPT
-#define NR_SHELL_PROMPT "nr@dev"
-#endif
-
-#ifndef NR_SHELL_MAX_PARAM_NUM
-#define NR_SHELL_MAX_PARAM_NUM 8
-#endif
-
-#ifdef NR_SHELL_HISTORY_CMD_SUPPORT
-#ifndef NR_SHELL_HISTORY_CMD_NUM
-#define NR_SHELL_HISTORY_CMD_NUM 5
-#endif
-
-#ifndef NR_SHELL_HISTORY_CMD_SZ
-#define NR_SHELL_HISTORY_CMD_SZ 50
-#endif
-#endif
-
-struct nr_micro_shell {
-	uint8_t cursor_pos;
-	uint8_t rcv_len;
-	char line[NR_SHELL_MAX_LINE_SZ];
-	uint8_t state;
-
-#ifdef NR_SHELL_HISTORY_CMD_SUPPORT
-	char his_cmd[NR_SHELL_HISTORY_CMD_NUM][NR_SHELL_HISTORY_CMD_SZ];
-	char shadow_line[NR_SHELL_MAX_LINE_SZ];
-	uint8_t his_cmd_count;
-	uint8_t his_cmd_request_index;
-	uint8_t his_cmd_rear;
-#endif
-};
-
-struct cmd {
-	char *name;
-	int (*func)(uint8_t argc, char **argv);
-	char *desc;
-};
-
-extern struct cmd cmd_table[];
-extern char *auto_complete_words[];
-extern const uint16_t cmd_table_size;
-extern const uint16_t auto_complete_words_size;
-
-void shell_printf(const char *fmt, ...);
-void shell_init(void);
-void shell(char c);
-void show_all_cmds(void);
+/* Optional configuration macros */
 
 #ifdef __cplusplus
 }
 #endif
-#endif /* __NR_MICRO_SHELL_H */
-
-/******************* (C) COPYRIGHT 2025 Ji Youzhou ****************************/
+#endif /* __NR_MICRO_SHELL_PORT_H__ */
+/******************* (C) COPYRIGHT 2025 Ji Youzhou *********************************/

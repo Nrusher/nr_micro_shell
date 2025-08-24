@@ -1,0 +1,5 @@
+examples/linux_with_mini_config/out/
+examples/simulator/out/
+.vscode/
+.cache/
+compile_commands.json

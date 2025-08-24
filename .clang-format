@@ -64,12 +64,6 @@ DisableFormat: false
 ExperimentalAutoDetectBinPacking: false
 FixNamespaceComments: false
 
-# Taken from:
-#   git grep -h '^#define [^[:space:]]*for_each[^[:space:]]*(' include/ tools/ \
-#   | sed "s,^#define \([^[:space:]]*for_each[^[:space:]]*\)(.*$,  - '\1'," \
-#   | LC_ALL=C sort -u
-ForEachMacros: ''
-
 IncludeBlocks: Preserve
 IncludeCategories:
   - Regex: '.*'
