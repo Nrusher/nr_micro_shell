@@ -4,6 +4,8 @@ DGBFLAG := -g -fprofile-arcs -ftest-coverage --coverage -lgcov -D NR_DEBUG_BIN -
 CCOBJFLAG := $(CCFLAG) -c
 
 BIN_PATH := out
+$(shell mkdir -p $(BIN_PATH))
+
 SRC_PATH := ../../src
 
 TARGET_NAME := nr_shell
