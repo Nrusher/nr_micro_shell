@@ -2,83 +2,74 @@
 
 [English Version](./README_EN.md)
 
-> v1.0.2
+> v2.0
 
 ## 1、介绍
 
-在进行调试和维护时，常常需要与单片机进行交互，获取、设置某些参数或执行某些操作，**nr_micro_shell**正是为满足这一需求，针对资源较少的MCU编写的基本命令行工具。虽然RT_Thread组件中已经提供了强大的**finsh**命令行交互工具，但对于ROM、RAM资源较少的单片机，**finsh**还是略显的庞大，在这些平台上，若仍想保留基本的命令行交互功能，**nr_micro_shell**是一个不错的选择。
+MCU调试常需要执行获取/配置参数、执行特定函数等交互操作，**nr_micro_shell**是为满足该需求的低开销、裸机可用的命令行交互工具。
 
-**nr_micro_shell**具有以下优点
-
-1.占用资源少，使用简单，灵活方便。使用过程只涉及两个shell_init()和shell()两个函数，无论是使用RTOS还是裸机都可以方便的应用该工具，不需要额外的编码工作。
-
-2.交互体验好。完全类似于linux shell命令行，当串口终端支持ANSI（如Hypertrm终端）时，其不仅支持基本的命令行交互，还提供Tab键命令补全，查询历史命令，方向键移动光标修改功能。
-
-3.扩展性好。**nr_micro_shell**为用户提供自定义命令的标准函数原型，只需要按照命令编写命令函数，并注册命令函数，即可使用命令。
-
-**nr_micro_shell**和相同配置下的**finsh** （finsh不使用msh）占用资源对比
-
-|    | 原始工程  | 添加nr_micro_shell增加量 | 添加finsh增加量
-|--- | ----- | ------------------- | ----------
-|ROM | 63660 | +3832               | +26908
-|RAM | 4696  | +1104               | +1304
-
-两者配置都为
-
-- 最多3条历史命令。
-- 支持Tab补全 。
-- 命令行最大长度为100。
-- 最多10个命令参数。
-- 命令行线程堆栈为512字节。
-
-nr_micro_shell演示效果如下
-
+demo:
 ![RT演示](./docs/pic/rt_test.gif)
 ![裸机演示](./docs/pic/test.gif)
 
+**nr_micro_shell** 目标：**易用、低开销、可靠、可扩展**
+
+1.易用：
+ - 适配：最少仅需实现shell_putc()函数，使用shell(c)获取字符流，即可使用。
+ - 交互：支持Tab补全，历史命令查询，与linux命令行交互体验基本相同。
+
+2.低开销：对比rt-thread fish开销
+|     | 原始工程 | 添加nr_micro_shell增量 | 添加finsh增量 |
+| --- | -------- | ------------------------ | --------------- |
+| ROM | 63660    | +3832                    | +26908          |
+| RAM | 4696     | +1104                    | +1304           |
+两者配置都为
+- 最多3条历史命令
+- 支持Tab补全
+- 命令行最大长度为100
+- 最多10个命令参数
+- 命令行线程堆栈为512字节
+
+3.可靠：
+ - TODE: gcov代码覆盖率100% 
+ - TODE: asan内存检测，确保内存安全
+
+4.可扩展性：支持用户自定义命令
+预实现命令：
+| 命令    | 功能说明       |
+| ------- | -------------- |
+| help    | 显示所有命令   |
+| rd      | 读内存         |
+| wr      | 写内存         |
+| hex2dec | 16进制转10进制 |
+
 ### 1.1 目录结构
 
-名称       | 说明
--------- | --------------------------------------------------------------------------------------------
-docs     | 文档目录，包含演示的GIF图片等
-examples | 例子目录，包括命令函数示例： **_nr_micro_shell_commands.c_** 和RT_Thread下使用示例 **_nr_micro_shell_thread.c_**
-inc      | 头文件目录
-src      | 源代码目录
+| 名称     | 说明     |
+| -------- | -------- |
+| docs     | 开发文档 |
+| examples | demo代码 |
+| inc      | 头文件   |
+| src      | 源代码   |
 
-### 1.2 许可证
+### 1.2 许可
 
-nr_micro_shell package 遵循 MIT 许可，详见 `LICENSE` 文件。
+nr_micro_shell 遵循 MIT 许可，详见 `LICENSE` 文件。
 
-### 1.3 依赖
+## 2、使用方法
 
-无依赖
+前置依赖：基础libc库，string.h/stdio.h/stdlib.h/stdint.h/stdarg.h中相关函数实现
 
-## 2、RT_Thread 下 ENV 工具使用nr_micro_shell package
+### 2.1 适配代码
 
-RT_Thread 使用 nr_micro_shell package package 需要在 RT-Thread 的包管理器中选择它，具体路径如下：
+可参考examples/simulator和examples/linux_with_mini_config
 
-```
-RT-Thread online packages
-    tools packages ---> 
-        [*] nr_micro_shell:Lightweight command line interaction tool. --->
-```
+- 【必有】nr_micro_shell_port.h: 用于传递配置信息，必需声明或define `shell_putc()`函数，其余宏配置可参考simulator头文件中的注释。
+- 【可选】nr_micro_shell_port.c: 适配nr_micro_shell的底层函数的实现，如shell_putc()等
 
-相关的设置在按下`sapce`键选中后，按`enter`可进行相关参数配置。然后让 RT-Thread 的包管理器自动更新，或者使用 `pkgs --update` 命令更新包到 BSP 中。
+### 2.2 代码使用
 
-若您需要运行示例，请保证RT_Thread配置中的`Using console for kt_printf.`选项是被打开的，kt_printf可以正常工作，且`Use components automatically initialization.`选项打开。编译直接下载或仿真便可以使用nr_micro_shell。命令行空白时按Tab，可显示所有支持的命令，测试示例命令可见doc/pic下的使用示例动图。自定义命令过程，参照下文**3\. 裸机下使用nr_micro_shell package**中的方法。
-
-## 3、裸机下使用nr_micro_shell package
-
-### 3.1 配置:
-
-所有配置工作都可以在 **_nr_micro_shell_config.h_** 中完成。有关详细信息，请参见文件中的注释。
-
-### 3.2 用法:
-
-- 确保所有文件都已添加到项目中。
-
-- 确保 **_nr_micro_shell_config.h_** 中的宏函数"shell_printf()，ansi_show_char()"可以在项目中正常使用。
-
+- 添加所有文件到项目中。
 - 使用示例如下
 
 ```c
@@ -86,139 +77,57 @@ RT-Thread online packages
 
 int main(void)
 {
-    /* 初始化 */
     shell_init();
-
-    while(1)
-    {
-        if(USART GET A CHAR 'c')
-        {
-            /* nr_micro_shell接收字符 */
+    while(1) {
+        if(/* get a char c ? */) {
             shell(c);
         }
     }
 }
 ```
 
-建议直接使用硬件输入前，建议使用如下代码(确保可以正常打印信息)，验证nr_micro_shell是否可以正常运行
+### 2.3 添加命令
+
+命令函数原型：
 ```c
-#include "nr_micro_shell.h"
-
-int main(void)
-{
-    unsigned int i = 0;
-    //匹配好结束符配置 NR_SHELL_END_OF_LINE 0
-    char test_line[] = "test 1 2 3\n"
-    /* 初始化 */
-    shell_init();
-    
-    /* 初步测试代码 */
-    for(i = 0; i < sizeof(test_line)-1; i++)
-    {
-        shell(test_line[i]);
-    }
-
-    /* 正式工作代码 */
-    while(1)
-    {
-        if(USART GET A CHAR 'c')
-        {
-            /* nr_micro_shell接收字符 */
-            shell(c);
-        }
-    }
+int cmd_xxx(uint8_t argc, char **argv) {
+    // do something
+    return ret;
 }
 ```
-
-### 3.3 添加自己的命令
-
-**STEP1**:
-
-您需要在**nr_micro_shell_commands.c***中实现一个命令函数。命令函数的原型如下
-
+实现函数后需要手动添加到src/nr_micro_shell_cmds.c中
 ```c
-void your_command_funtion(char argc, char *argv)
-{
-    .....
-}
-```
-
-**argc**是参数的数目。**argv**存储每个参数的起始地址和内容。如果输入字符串是
-
-```c
-test -a 1
-```
-
-则**argc**为3，**argv**的内容为
-
-```c
--------------------------------------------------------------
-0x03|0x08|0x0b|'t'|'e'|'s'|'t'|'\0'|'-'|'a'|'\0'|'1'|'\0'|
--------------------------------------------------------------
-```
-
-如果想知道第一个或第二个参数的内容，应该使用
-
-```c
-/* "-a" */
-printf(argv[argv[1]])
-/* "1" */
-printf(argv[argv[2]])
-```
-
-**STEP2**:
-在使用命令前需要注册命令，共有两种方法注册命令
-
-1.当配置文件中NR_SHELL_USING_EXPORT_CMD未被定义，在**static_cmd[]**表中写入
-
-```c
-const static_cmd_st static_cmd[] =
-{
-   .....
-   {"your_command_name",your_command_funtion},
-   .....
-   {"\0",NULL}
+struct cmd cmd_table[] = { { .name = "help", .func = cmd_help, .desc = "show this help" },
+			   { .name = "your cmd name", .func = cmd_xxx, .desc = "the description of your cmd" },
 };
 ```
 
-**_注意：不要删除{"\0"，NULL}！_**
+### 2.4 终端选择
+建议选择支持标准VT100终端的串口终端，如MobaXTerm、SecureCRT等，同时关掉终端的回显功能，否则可能导致乱码。
 
-2.当配置文件中NR_SHELL_USING_EXPORT_CMD被定义，且NR_SHELL_CMD_EXPORT()支持使用的编译器时，可以使用以下方式注册命令
-```c
-NR_SHELL_CMD_EXPORT(your_command_name,your_command_funtion);
-```
 
-## 4、linux下使用nr_micro_shell仿真
+## 3、如何参与开发？
 
-在工程`./examples/simulator/`目录下存放着nr_micro_shell仿真代码，仍在`./examples/nr_micro_shell_commands.c`文件中按上述方式添加自定义命令，添加完成后可以使用make命令编译源码，生产的可执行文件为`./examples/simulator/out/nr_micro_shell`或`./examples/simulator/out/nr_micro_shell_db`。可使用的make命令如下
+建议在linux上使用`examples/simulator/`做开发验证，使用方式
 ```sh
-# 编译可执行文件
+cd examples/simulator/
+# 编译bin
 make
-# 编译可仿真执行文件
+# 或者编译debug bin
 make debug
+# 运行
+./out/nr_shell
+# 启动DEBUG日志监控
+tail -f ./debug.log
+# 启动按键序列监控
+tail -f ./key_rec.log
 # 清除编译生成文件
 make clean
 ```
+如果想贡献代码，请提交PR到github仓。
+如有意见或建议，请提交issue到github或gitee。
 
-## 5、注意事项
-
-根据你的使用习惯使用NR_SHELL_USING_EXPORT_CMD选择命令注册方式。
-
-使用注册表注册命令时，确保您的工程中存在注册表
-
-```c
-const static_cmd_st static_cmd[] =
-{
-   .....
-   {"\0",NULL}
-};
-```
-
-使用NR_SHELL_CMD_EXPORT()时确保，NR_SHELL_CMD_EXPORT()支持使用的编译器，否则会报错。
-
-nr_micro_shell 不支持ESC键等控制键（控制符）。
-
-## 6、联系方式 & 感谢
+## 4、联系方式 & 感谢
 
 - 维护：Nrusher
 - 主页：<https://github.com/Nrusher/nr_micro_shell> or <https://gitee.com/nrush/nr_micro_shell>
