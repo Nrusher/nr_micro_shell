@@ -32,6 +32,8 @@ extern "C" {
 
 #include "nr_micro_shell_port.h"
 
+#define NR_SHELL_VERSION "2.0.0"
+
 /* Default config */
 #ifndef NR_SHELL_MAX_LINE_SZ
 #define NR_SHELL_MAX_LINE_SZ 80

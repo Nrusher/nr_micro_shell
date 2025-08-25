@@ -644,7 +644,7 @@ void shell_init(void)
 	shell_printf("| |\\  |  _ <  | |  | | | (__| | | (_) |  ___) | | | |  __/ | |\r\n");
 	shell_printf("|_| \\_|_| \\_\\ |_|  |_|_|\\___|_|  \\___/  |____/|_| |_|\\___|_|_|\r\n");
 	shell_printf("                                                              \r\n");
-	shell_printf("Welcome to the nr_micro_shell! build time %s %s\r\n", __DATE__, __TIME__);
+	shell_printf("Welcome to the nr_micro_shell v%s! Build time %s %s\r\n", NR_SHELL_VERSION, __DATE__, __TIME__);
 #endif
 	print_prompt(&_default_sh);
 }

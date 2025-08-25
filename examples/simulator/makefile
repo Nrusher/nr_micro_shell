@@ -1,6 +1,6 @@
 CC := gcc
 CCFLAG :=
-DGBFLAG := -g -fprofile-arcs -ftest-coverage --coverage -lgcov -D NR_DEBUG_BIN -fPIC -O0
+DGBFLAG := -g -fprofile-arcs -ftest-coverage --coverage -lgcov -D NR_DEBUG_BIN -fPIC -fsanitize=address
 CCOBJFLAG := $(CCFLAG) -c
 
 BIN_PATH := out
@@ -26,12 +26,11 @@ default : all
 .PHONY: all
 all:
 	@rm -f $(TARGET)
-	$(CC) $(CCFLAG) $(INC) -D NR_MICRO_SHELL_SIMULATOR $(SRC) -o $(TARGET) -l curses
-
+	$(CC) $(CCFLAG) $(INC) $(SRC) -o $(TARGET)
 .PHONY: debug
 debug:
 	@rm -f $(TARGET_DEBUG)
-	$(CC) $(CCFLAG) $(DGBFLAG) $(INC) -D NR_MICRO_SHELL_SIMULATOR $(SRC) -o $(TARGET_DEBUG) -l curses
+	$(CC) $(CCFLAG) $(DGBFLAG) $(INC) $(SRC) -o $(TARGET_DEBUG)
 
 .PHONY: clean
 clean:
