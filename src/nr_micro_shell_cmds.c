@@ -148,7 +148,7 @@ int cmd_wr(uint8_t argc, char **argv)
 }
 #endif
 
-#ifndef NR_SHELL_CMD_HEX2DEC
+#ifdef NR_SHELL_CMD_HEX2DEC
 int cmd_hex2dec(uint8_t argc, char **argv)
 {
 	uint32_t value;

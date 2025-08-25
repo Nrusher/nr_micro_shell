@@ -1,6 +1,6 @@
 CC := gcc
 CCFLAG :=
-DGBFLAG := -g -fprofile-arcs -ftest-coverage
+DGBFLAG := -g
 CCOBJFLAG := $(CCFLAG) -c
 
 BIN_PATH := out
@@ -25,7 +25,7 @@ default : all
 .PHONY: all
 all:
 	@rm -f $(TARGET)
-	$(CC) $(CCFLAG) $(INC) $(SRC) -o $(TARGET) -l curses
+	$(CC) $(CCFLAG) $(INC) $(SRC) -o $(TARGET)
 
 .PHONY: debug
 debug: 

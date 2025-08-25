@@ -35,24 +35,28 @@ extern "C" {
 
 /* Required configuration macros */
 #define shell_putc(x) putchar((x))
-#define NR_SHELL_MAX_LINE_SZ 80
-#define NR_SHELL_PROMPT "nr@dev"
-#define NR_SHELL_MAX_PARAM_NUM 16
 
 /* Optional configuration macros */
+#define NR_SHELL_MAX_LINE_SZ 80 /* Maximum command line length */
+#define NR_SHELL_PROMPT "nr@dev" /* Command prompt string */
+#define NR_SHELL_MAX_PARAM_NUM 16 /* Maximum number of parameters per command */
 
-#define NR_SHELL_SHOW_LOGO
+#define NR_SHELL_CMD_WR /* Enable write command support */
+#define NR_SHELL_CMD_RD /* Enable read command support */
+#define NR_SHELL_CMD_HEX2DEC /* Enable hexadecimal to decimal conversion */
 
-#define NR_SHELL_AUTO_COMPLETE_SUPPORT
+#define NR_SHELL_SHOW_LOGO /* Enable shell logo display */
 
-#define NR_SHELL_HISTORY_CMD_SUPPORT
-#define NR_SHELL_HISTORY_CMD_NUM 5
-#define NR_SHELL_HISTORY_CMD_SZ 64
+#define NR_SHELL_AUTO_COMPLETE_SUPPORT /* Enable command auto-completion feature */
+
+#define NR_SHELL_HISTORY_CMD_SUPPORT /* Enable command history feature */
+#define NR_SHELL_HISTORY_CMD_NUM 5 /* Number of commands to keep in history */
+#define NR_SHELL_HISTORY_CMD_SZ 64 /* Maximum size of each history command */
 
 uint64_t get_sys_timestamp(void);
-#define shell_get_ts() get_sys_timestamp()
+#define shell_get_ts() get_sys_timestamp() /* Macro to get current system timestamp */
 
-#define NR_SHELL_DEBUG
+#define NR_SHELL_DEBUG /* Enable debug logging functionality for the shell */
 
 #ifdef NR_SHELL_DEBUG
 extern FILE *dbug_log;
@@ -61,7 +65,6 @@ extern FILE *key_rec_log;
 #define KEY_RECORD(c) fprintf(key_rec_log, "%x ", c)
 void nr_shell_debug_log_init(void);
 #endif
-
 
 #ifdef __cplusplus
 }
