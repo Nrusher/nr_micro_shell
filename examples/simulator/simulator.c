@@ -13,6 +13,21 @@ int main(int argc, char *argv[])
 	system("stty -echo");
 	system("stty -icanon");
 	shell_init();
+#ifdef NR_SHELL_DEBUG
+#if defined (NR_SHELL_CMD_RD) || defined (NR_SHELL_CMD_WR)
+	/* To test wr/rd cmd, malloc 4KB mem*/
+	uint8_t *buf = malloc(4096);
+	if (buf == NULL) {
+		shell_printf( "malloc failed\r\n");
+		return -1;
+	}
+
+	for (i = 0; i < 4096; i++) {
+        buf[i] = (unsigned char)(i % 256);
+    }
+	shell_printf("malloc 4KB mem, address: %p\r\n", buf);
+#endif
+#endif
 	while (1) {
 		c = getchar();
 		shell(c);
