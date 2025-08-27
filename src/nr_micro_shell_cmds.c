@@ -37,55 +37,58 @@ int cmd_help(uint8_t argc, char **argv)
 #ifdef NR_SHELL_CMD_RD
 int cmd_rd(uint8_t argc, char **argv)
 {
-	uint32_t addr, size = 256;
+	uintptr_t addr;
+	uint32_t size = 1;
 	uint8_t *p;
 	int i, j;
 
 	if (argc < 2) {
-		shell_printf("Usage: rd <addr> [size]\n");
+		shell_printf("Usage: rd <addr hex> [size dec, default 1]\r\n");
+		shell_printf("Example: rd 0x58b053f79c50 16\r\n");
 		return -1;
 	}
 
-	addr = strtoul(argv[1], NULL, 16);
-	if (sscanf(argv[1], "%x", &addr) != 1) {
+	if (sscanf(argv[1], "%lx", &addr) != 1) {
 		shell_printf("Invalid address format\n");
 		return -1;
 	}
 
 	if (argc > 2) {
-		if (sscanf(argv[2], "%x", &size) != 1) {
+		if (sscanf(argv[2], "%d", &size) != 1) {
 			printf("Invalid size format\n");
 			return -1;
 		}
 	}
 
-	size = (size + 15) & ~15;
+	shell_printf("start address: %p\r\n", addr);
 
-	p = (uint8_t *)(uintptr_t)addr;
+	p = (uint8_t *)addr;
 	for (i = 0; i < size; i += 16) {
-		shell_printf("%08x: ", (uint32_t)(uintptr_t)(p + i));
-		for (j = 0; j < 16; j++) {
-			if (i + j < size) {
-				shell_printf("%02x ", p[i + j]);
-			} else {
-				shell_printf("   ");
-			}
+		shell_printf("%08lx: ", i);
+		for (j = 0; j < 16 && (i + j) < size; j++) {
+			shell_printf("%02x ", p[i + j]);
+			if (j == 7)
+				shell_printf(" "); // 添加空格分隔
 		}
 
-		shell_printf(" ");
-		for (j = 0; j < 16; j++) {
-			if (i + j < size) {
-				if (p[i + j] >= 32 && p[i + j] <= 126) {
-					shell_printf("%c", p[i + j]);
-				} else {
-					shell_printf(".");
-				}
-			} else {
+		while (j < 16) {
+			shell_printf("   ");
+			if (j == 7)
 				shell_printf(" ");
+			j++;
+		}
+
+		shell_printf(" |");
+
+		for (j = 0; j < 16 && (i + j) < size; j++) {
+			if (p[i + j] >= 32 && p[i + j] <= 126) {
+				shell_printf("%c", p[i + j]);
+			} else {
+				shell_printf(".");
 			}
 		}
 
-		shell_printf("\n");
+		shell_printf("|\r\n");
 	}
 
 	return 0;
@@ -95,20 +98,20 @@ int cmd_rd(uint8_t argc, char **argv)
 #ifdef NR_SHELL_CMD_WR
 int cmd_wr(uint8_t argc, char **argv)
 {
-	uint32_t addr;
+	uintptr_t addr;
 	uint32_t value;
 	uint8_t *p;
 	int size = 4;
 
 	if (argc < 3) {
-		shell_printf("Usage: wr <addr> <value> [b|w|l]\n");
+		shell_printf("Usage: wr <addr hex> <value hex> [b|w|l]\n");
 		shell_printf("  b: byte (1 byte)\n");
 		shell_printf("  w: word (2 bytes)\n");
 		shell_printf("  l: long (4 bytes, default)\n");
 		return -1;
 	}
 
-	if (sscanf(argv[1], "%x", (uint32_t *)&addr) != 1) {
+	if (sscanf(argv[1], "%lx", &addr) != 1) {
 		shell_printf("Invalid address format\n");
 		return -1;
 	}
@@ -127,7 +130,7 @@ int cmd_wr(uint8_t argc, char **argv)
 		}
 	}
 
-	p = (uint8_t *)(uintptr_t)addr;
+	p = (uint8_t *)addr;
 
 	switch (size) {
 		case 1:
@@ -168,18 +171,19 @@ int cmd_hex2dec(uint8_t argc, char **argv)
 }
 #endif
 
-struct cmd cmd_table[] = { { .name = "help", .func = cmd_help, .desc = "show this help" },
+struct cmd cmd_table[] = {
+	{ .name = "help", .func = cmd_help, .desc = "show this help" },
 
 #ifdef NR_SHELL_CMD_RD
-			   { .name = "rd", .func = cmd_rd, .desc = "read memory" },
+	{ .name = "rd", .func = cmd_rd, .desc = "read memory" },
 #endif
 
 #ifdef NR_SHELL_CMD_WR
-			   { .name = "wr", .func = cmd_wr, .desc = "write memory" },
+	{ .name = "wr", .func = cmd_wr, .desc = "write memory" },
 #endif
 
 #ifdef NR_SHELL_CMD_HEX2DEC
-			   { .name = "hex2dec", .func = cmd_hex2dec, .desc = "hex to decimal" },
+	{ .name = "hex2dec", .func = cmd_hex2dec, .desc = "hex to decimal" },
 #endif
 };
 
@@ -189,7 +193,5 @@ const uint16_t cmd_table_size = sizeof(cmd_table) / sizeof(cmd_table[0]);
 char *auto_complete_words[] = { "-h", "-p", "-t" };
 const uint16_t auto_complete_words_size = sizeof(auto_complete_words) / sizeof(auto_complete_words[0]);
 #endif
-
-
 
 /******************* (C) COPYRIGHT 2025 Ji Youzhou *********************************/
