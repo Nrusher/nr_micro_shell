@@ -31,7 +31,7 @@
 FILE *dbug_log;
 FILE *key_rec_log;
 
-uint64_t get_sys_timestamp(void)
+uint64_t get_sys_timestamp_ns(void)
 {
 	struct timespec ts;
 	clock_gettime(CLOCK_MONOTONIC, &ts);

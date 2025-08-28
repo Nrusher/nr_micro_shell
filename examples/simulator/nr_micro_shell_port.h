@@ -44,6 +44,7 @@ extern "C" {
 #define NR_SHELL_CMD_WR /* Enable write command support */
 #define NR_SHELL_CMD_RD /* Enable read command support */
 #define NR_SHELL_CMD_HEX2DEC /* Enable hexadecimal to decimal conversion */
+#define NR_SHELL_CMD_TIME /* Enable time cmd */
 
 #define NR_SHELL_SHOW_LOGO /* Enable shell logo display */
 
@@ -53,15 +54,15 @@ extern "C" {
 #define NR_SHELL_HISTORY_CMD_NUM 5 /* Number of commands to keep in history */
 #define NR_SHELL_HISTORY_CMD_SZ 64 /* Maximum size of each history command */
 
-uint64_t get_sys_timestamp(void);
-#define shell_get_ts() get_sys_timestamp() /* Macro to get current system timestamp */
+uint64_t get_sys_timestamp_ns(void);
+#define shell_get_ts_ns() get_sys_timestamp_ns() /* Macro to get current system timestamp */
 
 #define NR_SHELL_DEBUG /* Enable debug logging functionality for the shell */
 
 #ifdef NR_SHELL_DEBUG
 extern FILE *dbug_log;
 extern FILE *key_rec_log;
-#define DLOG(fmt, ...) fprintf(dbug_log, "[%ldns] %s %d: " fmt "\n", get_sys_timestamp(), __func__, __LINE__, ##__VA_ARGS__)
+#define DLOG(fmt, ...) fprintf(dbug_log, "[%ldns] %s %d: " fmt "\n", get_sys_timestamp_ns(), __func__, __LINE__, ##__VA_ARGS__)
 #define KEY_RECORD(c) fprintf(key_rec_log, "%x ", c)
 void nr_shell_debug_log_init(void);
 #endif

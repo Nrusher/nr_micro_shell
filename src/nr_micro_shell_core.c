@@ -122,10 +122,11 @@ static void print_prompt(struct nr_micro_shell *sh)
 
 static struct cmd *find_cmd(char *name)
 {
+	int i;
 	if (!name)
 		return NULL;
 
-	for (int i = 0; i < cmd_table_size; i++) {
+	for (i = 0; i < cmd_table_size; i++) {
 		if (!strcmp(name, cmd_table[i].name)) {
 			return &cmd_table[i];
 		}
