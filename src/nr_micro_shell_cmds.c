@@ -27,6 +27,7 @@
 #include "stdint.h"
 #include "stdio.h"
 #include "stdlib.h"
+#include "string.h"
 
 int cmd_help(uint8_t argc, char **argv)
 {
@@ -171,6 +172,50 @@ int cmd_hex2dec(uint8_t argc, char **argv)
 }
 #endif
 
+#ifdef NR_SHELL_CMD_TIME
+int cmd_time(uint8_t argc, char **argv)
+{
+	uint64_t start_time;
+	uint64_t end_time;
+	struct cmd *cmd = NULL;
+	int ret;
+	int i;
+
+	if (argc < 2) {
+		shell_printf("Usage: time <command>\r\n");
+		return -1;
+	}
+
+	for (i = 0; i < cmd_table_size; i++) {
+		if (!strcmp(argv[1], cmd_table[i].name)) {
+			break;
+		}
+	}
+
+	if (i == cmd_table_size) {
+		shell_printf("Unknown command: %s\r\n", argv[1]);
+		return -1;
+	}
+
+	cmd = &cmd_table[i];
+	if (cmd->func) {
+		start_time = shell_get_ts_ns();
+		ret = cmd->func(argc - 1, argv + 1);
+		end_time = shell_get_ts_ns();
+	} else {
+		shell_printf("Command %s has no function\r\n", cmd->name);
+		return -1;
+	}
+
+	shell_printf("------------------------------------------------------\r\n");
+	shell_printf("start time: %lld ns\r\n", start_time);
+	shell_printf("end time: %lld ns\r\n", end_time);
+	shell_printf("time consumption %lld ns.\r\n", end_time - start_time);
+
+	return 0;
+}
+#endif
+
 struct cmd cmd_table[] = {
 	{ .name = "help", .func = cmd_help, .desc = "show this help" },
 
@@ -184,6 +229,10 @@ struct cmd cmd_table[] = {
 
 #ifdef NR_SHELL_CMD_HEX2DEC
 	{ .name = "hex2dec", .func = cmd_hex2dec, .desc = "hex to decimal" },
+#endif
+
+#ifdef NR_SHELL_CMD_TIME
+	{ .name = "time", .func = cmd_time, .desc = "measure the cmd's execution time" },
 #endif
 };
 
