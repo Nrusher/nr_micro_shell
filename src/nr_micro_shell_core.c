@@ -97,6 +97,7 @@ static void add_history_cmd(struct nr_micro_shell *sh)
 	}
 
 	strncpy(sh->his_cmd[sh->his_cmd_rear], sh->line, sh->rcv_len);
+	sh->his_cmd[sh->his_cmd_rear][sh->rcv_len] = '\0';
 
 	if (sh->his_cmd_count < NR_SHELL_HISTORY_CMD_NUM) {
 		sh->his_cmd_count++;
